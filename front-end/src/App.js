@@ -7,20 +7,28 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+  navLink: {
+    color: '#fff',
+  },
+})
 
 function App() {
+  const classes = useStyles()
   return (
     <Router>
       <AppBar position="static">
         <Toolbar>
           <Link to="/">
-            <Button>Home</Button>
+            <Button className={classes.navLink}>Home</Button>
           </Link>
           <Link to="/login">
-            <Button>Login</Button>
+            <Button className={classes.navLink}>Login</Button>
           </Link>
           <Link to="/register">
-            <Button>Register</Button>
+            <Button className={classes.navLink}>Register</Button>
           </Link>
         </Toolbar>
       </AppBar>

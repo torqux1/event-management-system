@@ -8,7 +8,7 @@ function Login() {
   const [password, setPassword] = useState(undefined)
 
   function handleSubmit() {
-      console.log(email, password)
+    console.log(email, password)
   }
 
   return (
@@ -40,7 +40,12 @@ function Login() {
             onChange={(event) => setPassword(event.target.value)}
           />
 
-          <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleSubmit}
+          >
             Login
           </Button>
         </form>

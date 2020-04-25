@@ -8,6 +8,8 @@ function Register() {
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
+  console.log(process.env.REACT_APP_API_URL)
+
   function handleSubmit() {
     console.log(email, password, passwordConfirm)
   }
