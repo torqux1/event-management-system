@@ -2,16 +2,30 @@ import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
+import axios from 'axios'
 
 function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-
-  console.log(process.env.REACT_APP_API_URL)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
 
   function handleSubmit() {
-    console.log(email, password, passwordConfirm)
+    axios
+      .post(process.env.REACT_APP_API_URL, {
+        user: {
+          email,
+          password,
+          passwordConfirm,
+          firstName,
+          lastName,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch(console.error)
   }
 
   return (
@@ -28,6 +42,28 @@ function Register() {
             autoComplete="email"
             autoFocus
             onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="first-name"
+            label="First Name"
+            type="text"
+            autoComplete="first-name"
+            onChange={(event) => setFirstName(event.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="last-name"
+            label="Last Name"
+            type="text"
+            autoComplete="last-name"
+            onChange={(event) => setLastName(event.target.value)}
           />
           <TextField
             variant="outlined"

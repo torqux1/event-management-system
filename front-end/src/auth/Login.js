@@ -2,13 +2,24 @@ import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
+import axios from 'axios'
 
 function Login() {
   const [email, setEmail] = useState(undefined)
   const [password, setPassword] = useState(undefined)
 
   function handleSubmit() {
-    console.log(email, password)
+    axios
+      .post(process.env.REACT_APP_API_URL, {
+        user: {
+          email,
+          password,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch(console.error)
   }
 
   return (
