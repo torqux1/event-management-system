@@ -1,31 +1,55 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import TextField from '@material-ui/core/TextField'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
-import axios from 'axios'
+import SuccessAlert from '../../common/alerts/successAlert'
+import FailAlert from '../../common/alerts/failAlert'
+import { useHistory } from 'react-router-dom';
+import constants from '../../constants';
 
 function Register() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const history = useHistory();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [hasRegistered, setHasRegister] = useState(false);
+  const [intStatus, setIntStatus] = useState('success');
+  const [promptMsg, setPromptMsg] = useState('');
+  
 
   function handleSubmit() {
-    axios
-      .post(process.env.REACT_APP_API_URL, {
-        user: {
-          email,
-          password,
-          passwordConfirm,
-          firstName,
-          lastName,
-        },
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(console.error)
+        const formData = {
+            email: email,
+            password: password,
+            passwordConfirm: passwordConfirm,
+            firstName: firstName,
+            lastName: lastName,
+        };
+        axios({
+            method: 'post',
+            url: '/register',
+            data: formData,
+        })
+        .then((response) => {
+            console.log(`Response from server: ${response}`);
+            setHasRegister(true);
+            setPromptMsg(constants.userMessages.SUCC_REGISTER);
+        })
+        .catch((error) => {
+            console.log('Error after request');
+            console.error(error.response);
+
+            if(error.response.status === 400){
+                setPromptMsg(constants.userMessages.FAIL_REGISTER);
+                setIntStatus('fail');
+                return;
+            }
+            setPromptMsg(constants.userMessages.ERR_INTERNAL);
+            setIntStatus('fail');   
+        });
   }
 
   return (
@@ -96,6 +120,8 @@ function Register() {
           >
             Register
           </Button>
+          {hasRegistered? <SuccessAlert msg={promptMsg} onClose={() => {history.push('/login')}} /> :
+            intStatus==='fail'? <FailAlert msg={promptMsg} onClose={() => {}} /> : null}
         </form>
       </Container>
     </div>
