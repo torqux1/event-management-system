@@ -7,6 +7,7 @@ import {
 
 function EventDetails(props) {
   let { event, host } = props
+  
 
   return (
     <Box my={5}>

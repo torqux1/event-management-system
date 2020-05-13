@@ -5,6 +5,7 @@ import Register from '../auth/register'
 import Home from '../home'
 import Header from '../layout/header'
 import EventDashboard from './../event/EventDashboard.js'
+import EventInvitationForm from './../event/EventInvitationForm.js'
 
 function Navigation() {
   return (
@@ -14,6 +15,7 @@ function Navigation() {
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/event/invitation/:code" component={EventInvitationForm} />
         <Route path="/event/:id" component={EventDashboard} />
       </Switch>
     </Router>

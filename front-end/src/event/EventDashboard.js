@@ -15,6 +15,8 @@ import axios from 'axios'
 import EventDetails from './EventDetails.js'
 import EventStatistics from './EventStatistics.js'
 
+
+
 function EventDashboard() {
   let [event, setEvent] = useState({})
   let [host, setHost] = useState({})
