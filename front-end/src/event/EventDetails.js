@@ -1,16 +1,11 @@
 import React from 'react'
-import {
-  Box,
-  Typography,
-  Paper,
-} from '@material-ui/core'
+import { Box, Typography, Paper } from '@material-ui/core'
 
 function EventDetails(props) {
-  let { event, host } = props
-  
+  const { event, host, my = 5 } = props
 
   return (
-    <Box my={5}>
+    <Box my={my}>
       <Paper>
         <Box p={2}>
           <Typography variant="h5">{event.title}</Typography>
@@ -18,10 +13,16 @@ function EventDetails(props) {
           <Typography variant="overline" display="block" gutterBottom>
             {event.dateTime}
           </Typography>
-          Hosted by:
-          <Typography variant="subtitle2" gutterBottom>
-            {host.fullName}
-          </Typography>
+          {Boolean(host) ? (
+            <Box>
+              Hosted by:
+              <Typography variant="subtitle2" gutterBottom>
+                {host.fullName}
+              </Typography>
+            </Box>
+          ) : (
+            ''
+          )}
         </Box>
       </Paper>
     </Box>

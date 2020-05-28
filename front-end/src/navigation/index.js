@@ -5,6 +5,7 @@ import Register from '../auth/register'
 import Home from '../home'
 import Header from '../layout/header'
 import EventDashboard from './../event/EventDashboard.js'
+import EventCreate from './../event/EventCreate.js'
 import EventInvitationForm from './../event/EventInvitationForm.js'
 
 function Navigation() {
@@ -16,6 +17,7 @@ function Navigation() {
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/event/invitation/:code" component={EventInvitationForm} />
+        <Route path="/event/create" component={EventCreate} />
         <Route path="/event/:id" component={EventDashboard} />
       </Switch>
     </Router>
