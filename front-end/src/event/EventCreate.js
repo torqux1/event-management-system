@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Stepper,
@@ -38,8 +38,8 @@ function EventCreate() {
   const [newQuestionContent, setNewQuestionContent] = useState('')
   const steps = ['Event parameters', 'Questions', 'Overview and complete']
 
-  useEffect(() => {
-    if (activeStep === steps.length) {
+  const handleNext = () => {
+    if (activeStep + 1 === steps.length) {
       axios
         .post(process.env.REACT_APP_API_URL, {
           event: {
@@ -53,9 +53,6 @@ function EventCreate() {
         .then((res) => console.log())
         .catch(console.error)
     }
-  }, [activeStep])
-
-  const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
