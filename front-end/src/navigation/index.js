@@ -1,12 +1,14 @@
-import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Login from '../auth/login'
-import Register from '../auth/register'
-import Home from '../home'
-import Header from '../layout/header'
-import EventDashboard from './../event/EventDashboard.js'
-import EventCreate from './../event/EventCreate.js'
-import EventInvitationForm from './../event/EventInvitationForm.js'
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "../auth/login";
+import Register from "../auth/register";
+import Home from "../home";
+import Header from "../layout/header";
+import Footer from "../layout/footer";
+
+import EventDashboard from "./../event/EventDashboard.js";
+import EventCreate from "./../event/EventCreate.js";
+import EventInvitationForm from "./../event/EventInvitationForm.js";
 
 function Navigation() {
   return (
@@ -20,8 +22,9 @@ function Navigation() {
         <Route path="/event/create" component={EventCreate} />
         <Route path="/event/:id" component={EventDashboard} />
       </Switch>
+      <Footer></Footer>
     </Router>
-  )
+  );
 }
 
-export default Navigation
+export default Navigation;

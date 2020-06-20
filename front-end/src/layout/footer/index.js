@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import "./styles.css";
 
-//TODO Design some good footer
-function Footer(title) {
-    return (
-        <footer>asss</footer>
-    );
-  }
+function Footer() {
+  return (
+    <footer className="body-text">
+      Event Management System - Project for course Node Express React 2020
+    </footer>
+  );
+}
 
 export default Footer;

@@ -1,53 +1,56 @@
-import React, { useState } from 'react'
-import TextField from '@material-ui/core/TextField'
-import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
-import axios from 'axios'
-import SuccessAlert from '../../common/alerts/successAlert'
-import FailAlert from '../../common/alerts/failAlert'
-import { useHistory } from 'react-router-dom'
-import constants from '../../constants'
+import React, { useState } from "react";
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
+import SuccessAlert from "../../common/alerts/successAlert";
+import FailAlert from "../../common/alerts/failAlert";
+import { useHistory } from "react-router-dom";
+import constants from "../../constants";
 
 function Login() {
-  const history = useHistory()
-  const [email, setEmail] = useState(undefined)
-  const [password, setPassword] = useState(undefined)
-  const [hasLogged, sethasLogged] = useState(false)
-  const [intStatus, setIntStatus] = useState('success')
-  const [promptMsg, setPromptMsg] = useState('')
+  const history = useHistory();
+  const [email, setEmail] = useState(undefined);
+  const [password, setPassword] = useState(undefined);
+  const [hasLogged, sethasLogged] = useState(false);
+  const [intStatus, setIntStatus] = useState("success");
+  const [promptMsg, setPromptMsg] = useState("");
 
   function handleSubmit() {
     const formData = {
       email: email,
       password: password,
-    }
+    };
 
     axios({
-      method: 'post',
-      url: '/login',
+      method: "post",
+      url: "/login",
       data: formData,
     })
       .then(function (response) {
-        console.log(`Response from server: ${response}`)
-        window.sessionStorage.setItem('auth', {
-          isLoggedIn: true,
-          token: response.token,
-        })
-        setPromptMsg(constants.userMessages.SUCC_LOGIN)
-        sethasLogged(true)
+        console.log(`Response from server: ${response}`);
+        window.sessionStorage.setItem(
+          "auth",
+          JSON.stringify({
+            isLoggedIn: true,
+            token: response.token,
+          })
+        );
+        setPromptMsg(constants.userMessages.SUCC_LOGIN);
+        sethasLogged(true);
       })
       .catch(function (error) {
-        console.log('Error after request')
-        console.error(error.response)
+        console.log("Error after request");
+        console.error(error.response);
 
         if (error.response.status === 404) {
-          setPromptMsg(constants.userMessages.FAIL_LOGIN)
-          setIntStatus('fail')
-          return
+          setPromptMsg(constants.userMessages.FAIL_LOGIN);
+          setIntStatus("fail");
+          return;
         }
-        setPromptMsg(constants.userMessages.ERR_INTERNAL)
-        setIntStatus('fail')
-      })
+        setPromptMsg(constants.userMessages.ERR_INTERNAL);
+        setIntStatus("fail");
+      });
   }
 
   return (
@@ -91,16 +94,16 @@ function Login() {
             <SuccessAlert
               msg={promptMsg}
               onClose={() => {
-                history.push('/')
+                history.push("/");
               }}
             />
-          ) : intStatus === 'fail' ? (
+          ) : intStatus === "fail" ? (
             <FailAlert msg={promptMsg} onClose={() => {}} />
           ) : null}
         </form>
       </Container>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
