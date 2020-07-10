@@ -13,6 +13,7 @@ import QuestionsForm from './CreationFlow/QuestionsForm.js'
 import OverviewAndComplete from './CreationFlow/OverviewAndComplete.js'
 import axios from 'axios'
 import moment from 'moment'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function EventCreate() {
+  const history = useHistory()
   const classes = useStyles()
   const [activeStep, setActiveStep] = useState(0)
   const [title, setTitle] = useState('')
@@ -41,16 +43,23 @@ function EventCreate() {
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
       axios
-        .post(process.env.REACT_APP_API_URL, {
-          event: {
-            title,
-            description,
-            date,
-            time,
-            questions,
-          },
+        .post(`${process.env.REACT_APP_API_URL}/api/event/create`, {
+          title,
+          description,
+          date,
+          time,
+          questions,
         })
-        .then((res) => console.log())
+        .then(({ data }) => {
+          setTitle('')
+          setDescription('')
+          setDate(new Date())
+          setTime(new Date())
+          setQuestions([])
+          setNewQuestionContent('')
+
+          history.push('/event/' + data.event._id)
+        })
         .catch(console.error)
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
