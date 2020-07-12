@@ -44,12 +44,11 @@ module.exports = {
                 })
             })
             .catch((err) => {
-                console.log('Hello from error ' + err)
                 res.send(err)
             })
     },
     show: (req, res) => {
-        console.log(req.params.question_id)
+        console.log(req.headers)
         Event.findById(req.params.question_id, function (err, event) {
             if (err) {
                 res.json({
@@ -68,6 +67,7 @@ module.exports = {
             res.json({
                 success: true,
                 event,
+                statistics: []
             })
         })
     },

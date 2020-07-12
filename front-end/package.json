@@ -15,7 +15,7 @@
     "axios": "^0.19.2",
     "date-fns": "^2.14.0",
     "material-survey": "^1.0.35",
-    "moment": "^2.26.0",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",

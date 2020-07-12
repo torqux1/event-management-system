@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Typography, Paper } from '@material-ui/core'
 
 function EventDetails(props) {
-  const { event, host, my = 5 } = props
+  const { event, host, my = 3 } = props
 
   return (
     <Box my={my}>

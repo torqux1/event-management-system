@@ -11,132 +11,68 @@ import {
   Paper,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import api from './../config/axios.js'
 import EventDetails from './EventDetails.js'
 import EventStatistics from './EventStatistics.js'
+import moment from 'moment'
 
-
-
-function EventDashboard() {
+function EventDashboard(props) {
   let [event, setEvent] = useState({})
   let [host, setHost] = useState({})
-  let [inviteMail, setInviteMail] = useState("")
+  let [inviteMail, setInviteMail] = useState('')
   let [statistics, setStatistics] = useState([])
 
   useEffect(() => {
-    // axios.get(process.env.REACT_APP_API_URL).then((res) => {
-    //   setEvent({
-    //     id: 4,
-    //     name: "Pesho's birthday party",
-    //     dateTime: '12/05/2019 12:00',
-    //   })
-    // })
-
-    setEvent({
-      id: 4,
-      title: "Pesho's birthday party",
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et libero semper, hendrerit nisi vitae, laoreet erat. Etiam dapibus eleifend varius. Vestibulum iaculis finibus sagittis. In dictum, elit non dignissim euismod, risus quam blandit justo, vitae rutrum est leo quis mauris. Maecenas nec porttitor justo, sit amet viverra risus. Vestibulum dapibus, sem sed maximus dapibus, sem elit volutpat est, ut maximus velit tortor ut dolor. Quisque eleifend, dui non iaculis lacinia, mauris sem euismod est, vitae malesuada massa sem eget urna.',
-      dateTime: '12/05/2019 12:00',
+    api.get(`/event/${props.match.params.id}`).then(({ data }) => {
+      setEvent({
+        id: data.event.id,
+        title: data.event.title,
+        description: data.event.description,
+        dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
+          data.event.time
+        ).format('HH:mm')}`,
+      })
+      setStatistics(data.statistics)
     })
 
     setHost({
       fullName: 'Pesho Goshov',
     })
-
-    setStatistics([
-      {
-        id: 1,
-        content: 'What do you want to eat?',
-        answers: [
-          {
-            id: 1,
-            name: 'Fries',
-            value: 5,
-          },
-          {
-            id: 2,
-            name: 'Lamb',
-            value: 1,
-          },
-          {
-            id: 3,
-            name: 'Salad',
-            value: 10,
-          },
-        ],
-      },
-      {
-        id: 2,
-        content: 'How are you going to come tho the event',
-        answers: [
-          {
-            id: 1,
-            name: 'On foot',
-            value: 5,
-          },
-          {
-            id: 2,
-            name: 'By bus',
-            value: 0,
-          },
-          {
-            id: 3,
-            name: 'With my car',
-            value: 10,
-          },
-          {
-            id: 4,
-            name: 'Some other means',
-            value: 7,
-          },
-        ],
-      },
-      {
-        id: 3,
-        content: 'What do you want to drink?',
-        answers: [
-          {
-            id: 1,
-            name: 'Champagne',
-            value: 5,
-          },
-          {
-            id: 2,
-            name: 'Beer',
-            value: 50,
-          },
-        ],
-      },
-    ])
-  }, [])
+  }, [props.match.params.id])
 
   function inviteByMail() {
     if (inviteMail) {
-      axios.post(process.env.REACT_APP_API_URL + '/event/invite-by-mail', {
-        email: inviteMail
-      }).then((res) => {
-        console.log('inviteby mail res')
-      }).catch(console.error)
+      api
+        .post('/event/invite-by-mail', {
+          email: inviteMail,
+        })
+        .then((res) => {
+          console.log('inviteby mail res')
+        })
+        .catch(console.error)
     }
   }
 
   return (
     <Box>
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         <Grid item lg={1} md={1} sm={false} />
         <Grid item lg={7} md={7} sm={12}>
           <EventDetails event={event} host={host} />
-          <Box my={3}>
-            <Paper>
-              <Box p={2}>
-                <EventStatistics statistics={statistics} />
-              </Box>
-            </Paper>
-          </Box>
+          {statistics.length ? (
+            <Box my={3}>
+              <Paper>
+                <Box p={2}>
+                  <EventStatistics statistics={statistics} />
+                </Box>
+              </Paper>
+            </Box>
+          ) : (
+            ''
+          )}
         </Grid>
         <Grid item lg={3} md={3} sm={12}>
-          <Box my={5}>
+          <Box my={3}>
             <Card>
               <CardContent>
                 <Typography variant="h6" component="h2">
@@ -161,7 +97,7 @@ function EventDashboard() {
               </CardActions>
             </Card>
           </Box>
-          <Box my={5}>
+          <Box my={3}>
             <Card>
               <CardContent>
                 <Typography variant="h6" component="h2">
@@ -197,7 +133,7 @@ function EventDashboard() {
             </Card>
           </Box>
 
-          <Box my={5}>
+          <Box my={3}>
             <Card>
               <CardContent>
                 <Typography variant="h6" component="h2">
@@ -220,6 +156,12 @@ function EventDashboard() {
               </CardActions>
             </Card>
           </Box>
+          {/* TODO: make it work */}
+          {/* <Box my={3}>
+            <Button variant="contained" fullWidth={true}>
+              Delete
+            </Button>
+          </Box> */}
         </Grid>
         <Grid item lg={1} md={1} sm={false} />
       </Grid>
