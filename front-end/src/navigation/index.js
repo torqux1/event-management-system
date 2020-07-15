@@ -18,7 +18,7 @@ function Navigation() {
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/event/invitation/:code" component={EventInvitationForm} />
+        <Route path="/event/invitation/:eventId" component={EventInvitationForm} />
         <Route path="/event/create" component={EventCreate} />
         <Route path="/event/:id" component={EventDashboard} />
       </Switch>

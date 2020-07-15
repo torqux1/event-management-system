@@ -24,8 +24,9 @@ function EventDashboard(props) {
 
   useEffect(() => {
     api.get(`/event/${props.match.params.id}`).then(({ data }) => {
+      console.log(data)
       setEvent({
-        id: data.event.id,
+        id: data.event._id,
         title: data.event.title,
         description: data.event.description,
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
@@ -125,8 +126,8 @@ function EventDashboard(props) {
               <CardContent>
                 <Typography variant="body2" component="p">
                   or use this link: <br />
-                  <Link to="https://material-ui.com/system/spacing/">
-                    https://material-ui.com/system/spacing/
+                  <Link to={`/event/invitation/${event.id}`}>
+                    {`${process.env.REACT_APP_API_URL}/event/invitation/${event.id}`}
                   </Link>
                 </Typography>
               </CardContent>

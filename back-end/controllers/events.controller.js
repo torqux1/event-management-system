@@ -1,6 +1,6 @@
 const indicative = require('indicative/validator')
-const Event = require('./../models/event.model.js')
-const Question = require('./../models/question.model.js')
+const Event = require('./../models/event.model.js').model
+const Question = require('./../models/question.model.js').model
 const Answer = require('./../models/answer.model.js')
 
 module.exports = {
@@ -19,23 +19,27 @@ module.exports = {
                 event.description = req.body.description
                 event.date = req.body.date
                 event.time = req.body.time
-                event.save()
 
                 if (req.body.questions) {
                     for (const question of req.body.questions) {
                         const questionEntity = new Question()
                         questionEntity.content = question.content
-                        questionEntity.event_id = event._id
-                        questionEntity.save()
+                        questionEntity.event = event._id
+                        questionEntity.answers = []
 
                         for (const answer of question.answers) {
                             const answerEntity = new Answer()
                             answerEntity.content = answer
-                            answerEntity.quesiton_id = questionEntity._id
+                            answerEntity.question = questionEntity._id
                             answerEntity.save()
+                            questionEntity.answers.push(answerEntity.id)
                         }
+
+                        questionEntity.save()
                     }
                 }
+
+                event.save()
 
                 res.json({
                     success: true,
@@ -47,28 +51,25 @@ module.exports = {
                 res.send(err)
             })
     },
-    show: (req, res) => {
-        console.log(req.headers)
-        Event.findById(req.params.question_id, function (err, event) {
-            if (err) {
-                res.json({
-                    success: false,
-                    message: 'Something went wrong',
-                })
-            }
+    show: async (req, res) => {
+        const event = await Event.findById(req.params.question_id)
 
-            if (!event) {
-                res.json({
-                    success: false,
-                    message: 'No event found',
-                })
-            }
-
+        if (!event) {
             res.json({
-                success: true,
-                event,
-                statistics: []
+                success: false,
+                message: 'No event found',
             })
+        }
+
+        const questions = await Question.find({ event: event.id }).populate(
+            'answers'
+        )
+        event.questions = questions
+
+        res.json({
+            success: true,
+            event,
+            statistics: [],
         })
     },
 }
