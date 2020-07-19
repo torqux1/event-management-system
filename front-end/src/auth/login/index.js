@@ -29,6 +29,7 @@ function Login(props) {
     })
       .then(function (response) {
         console.log(`Response from server: ${response}`)
+
         window.sessionStorage.setItem(
           'auth',
           JSON.stringify({

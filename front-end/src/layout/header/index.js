@@ -21,6 +21,9 @@ function Header(props) {
             <Link to="/event/create">
               <Button className={classes.navLink}>Create event</Button>
             </Link>
+            <Link to="/meeting/create">
+              <Button className={classes.navLink}>Create new meeting</Button>
+            </Link>
             <Link to="#">
               <Button
                 className={classes.navLink}
