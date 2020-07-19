@@ -8,7 +8,7 @@ exports.login = (req, res) => {
     console.log('Generating token')
     try {
         let token = jwt.sign(req.body, jwtSecret)
-        res.status(201).send({ accessToken: token })
+        res.status(200).send({ accessToken: token })
     } catch (err) {
         res.status(500).send({ errors: err })
     }

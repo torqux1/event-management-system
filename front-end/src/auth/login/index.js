@@ -8,7 +8,7 @@ import FailAlert from '../../common/alerts/failAlert'
 import { useHistory } from 'react-router-dom'
 import constants from '../../constants'
 
-function Login() {
+function Login(props) {
   const history = useHistory()
   const [email, setEmail] = useState(undefined)
   const [password, setPassword] = useState(undefined)
@@ -36,14 +36,15 @@ function Login() {
             token: response.data.accessToken,
           })
         )
+        props.handleLogin()
         setPromptMsg(constants.userMessages.SUCC_LOGIN)
         sethasLogged(true)
       })
       .catch(function (error) {
         console.log('Error after request')
-        console.error(error.response)
+        console.error(error)
 
-        if (error.response.status === 404) {
+        if (error.response && error.response.status === 404) {
           setPromptMsg(constants.userMessages.FAIL_LOGIN)
           setIntStatus('fail')
           return

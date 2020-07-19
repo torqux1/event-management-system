@@ -8,8 +8,12 @@ const auth = require('./../authorization/middlewares/verify.user.middleware')
 
 router.post('/event/create', auth, eventsController.create)
 router.get('/event/:id', auth, eventsController.show)
-router.post('/event/:eventId/submit-invitation', auth, invitationsController.submit)
-router.get('/event', eventsController.index)
+router.post(
+    '/event/:eventId/submit-invitation',
+    auth,
+    invitationsController.submit
+)
+router.get('/event', auth, eventsController.index)
 router.get('/playground', async (req, res) => {
     // const e = await Question.findById('5f0f207f948f5e2210657c75').populate(
     //     'answers'

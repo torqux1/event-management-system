@@ -10,4 +10,8 @@ export default {
   isLoggedIn: function () {
     return this.parsed ? this.parsed.isLoggedIn : false
   },
+  logout: function () {
+    this.parsed = null
+    window.sessionStorage.removeItem('auth')
+  },
 }
