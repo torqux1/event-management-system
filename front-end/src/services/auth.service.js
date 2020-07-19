@@ -1,17 +1,19 @@
 export default {
-  parsed: JSON.parse(window.sessionStorage.getItem('auth')),
+  parse: function () {
+    return JSON.parse(window.sessionStorage.getItem('auth'))
+  },
   getToken: function () {
     if (!this.isLoggedIn()) {
       throw new Error('Accessing token without logged in user')
     }
 
-    return this.parsed.token
+    return this.parse().token
   },
   isLoggedIn: function () {
-    return this.parsed ? this.parsed.isLoggedIn : false
+    const parsed = this.parse()
+    return parsed ? parsed.isLoggedIn : false
   },
   logout: function () {
-    this.parsed = null
     window.sessionStorage.removeItem('auth')
   },
 }
