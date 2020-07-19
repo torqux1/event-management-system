@@ -1,73 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
 import EventCard from './eventCard'
-
+import api from './../../config/axios'
+import toast from 'toasted-notes'
+import 'toasted-notes/src/styles.css'
 
 export default function EventList() {
+  const [events, setEvents] = useState([])
 
-    let events = [
-        {
-            eventId: 5,
-            title: 'Pesho birthday',
-            description: 'Pesho birthday party',
-            date: '20.20.2020',
-            time: '22:22:22',
-        },
-        {
-            eventId: 6,
-            title: 'Penka birthday',
-            description: 'Penka birthday party',
-            date: '21.20.2020',
-            time: '22:22:22',
-        }
-        ,
-        {
-            eventId: 6,
-            title: 'Penka birthday',
-            description: 'Penka birthday party',
-            date: '21.20.2020',
-            time: '22:22:22',
-        }
-        ,
-        {
-            eventId: 6,
-            title: 'Penka birthday',
-            description: 'Penka birthday party',
-            date: '21.20.2020',
-            time: '22:22:22',
-        }
-        ,
-        {
-            eventId: 6,
-            title: 'Penka birthday',
-            description: 'Penka birthday party',
-            date: '21.20.2020',
-            time: '22:22:22',
-        }
-        ,
-        {
-            eventId: 6,
-            title: 'Penka birthday',
-            description: 'Penka birthday party',
-            date: '21.20.2020',
-            time: '22:22:22',
-        }
-    ]
+  useEffect(() => {
+    api.get(`/event`).then(({ data }) => {
+      if (data.success) {
+        setEvents(data.events)
+      } else {
+        toast.notify('Error', {
+          position: 'bottom-right',
+          duration: 1500,
+        })
+      }
+    })
+  }, [])
 
-    const cardsArray = events.map((event) => (
+  return (
+    <div>
+      {events.map((event) => (
         <EventCard
-        key={event.eventId} 
-        title={event.title}
-        description={event.description}
-        date={event.date}
-        time={event.time}
+          key={event._id}
+          id={event._id}
+          title={event.title}
+          description={event.description}
+          date={event.date}
+          time={event.time}
         />
-  
-    ));
-
-    return (
-        <div>
-        {cardsArray}
-        </div>
-    )
-} 
-
+      ))}
+    </div>
+  )
+}

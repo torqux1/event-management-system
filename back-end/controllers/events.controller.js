@@ -1,9 +1,23 @@
 const indicative = require('indicative/validator')
 const Event = require('./../models/event.model.js').model
 const Question = require('./../models/question.model.js').model
-const Answer = require('./../models/answer.model.js')
+const Answer = require('./../models/answer.model.js').model
 
 module.exports = {
+    index: (req, res) => {
+        Event.find((error, results) => {
+            if (error) {
+                res.json({
+                    success: false,
+                })
+            }
+
+            res.json({
+                success: true,
+                events: results,
+            })
+        })
+    },
     create: (req, res) => {
         indicative
             .validate(req.body, {
@@ -19,6 +33,7 @@ module.exports = {
                 event.description = req.body.description
                 event.date = req.body.date
                 event.time = req.body.time
+                event.save()
 
                 if (req.body.questions) {
                     for (const question of req.body.questions) {
@@ -26,20 +41,22 @@ module.exports = {
                         questionEntity.content = question.content
                         questionEntity.event = event._id
                         questionEntity.answers = []
+                        questionEntity.save()
 
-                        for (const answer of question.answers) {
+                        const uniqueAnswers = [...new Set(question.answers)]
+
+                        for (const answer of uniqueAnswers) {
                             const answerEntity = new Answer()
                             answerEntity.content = answer
                             answerEntity.question = questionEntity._id
                             answerEntity.save()
-                            questionEntity.answers.push(answerEntity.id)
+
+                            questionEntity.answers.push(answerEntity._id)
                         }
 
                         questionEntity.save()
                     }
                 }
-
-                event.save()
 
                 res.json({
                     success: true,
@@ -52,7 +69,7 @@ module.exports = {
             })
     },
     show: async (req, res) => {
-        const event = await Event.findById(req.params.question_id)
+        const event = await Event.findById(req.params.id)
 
         if (!event) {
             res.json({

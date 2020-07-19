@@ -11,7 +11,7 @@ import {
 import EventForm from './CreationFlow/EventForm.js'
 import QuestionsForm from './CreationFlow/QuestionsForm.js'
 import OverviewAndComplete from './CreationFlow/OverviewAndComplete.js'
-import axios from 'axios'
+import api from './../config/axios'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 
@@ -42,8 +42,8 @@ function EventCreate() {
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/api/event/create`, {
+      api
+        .post(`/event/create`, {
           title,
           description,
           date,
@@ -75,7 +75,6 @@ function EventCreate() {
 
   const addQuestion = (event) => {
     event.preventDefault()
-    console.log(newQuestionContent)
     setQuestions([
       ...questions,
       {

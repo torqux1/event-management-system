@@ -18,7 +18,7 @@ app.use(function (req, res, next) {
         'Accept, Authorization, Content-Type, X-Requested-With, Range'
     )
     if (req.method === 'OPTIONS') {
-        return res.send(200)
+        return res.sendStatus(200)
     } else {
         return next()
     }

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import EventDetails from './EventDetails.js'
-import { Grid } from '@material-ui/core'
-import axios from 'axios'
+import { Grid, Typography } from '@material-ui/core'
 import Survey from 'material-survey/components/Survey'
 import moment from 'moment'
 import api from './../config/axios.js'
 
 function EventInvitationForm(props) {
-  let [event, setEvent] = useState({})
-  let [host, setHost] = useState({})
-  let [questions, setQuestions] = useState([])
+  const [event, setEvent] = useState({})
+  const [host, setHost] = useState({})
+  const [questions, setQuestions] = useState([])
+  const [isStored, setIsStored] = useState(false)
 
   useEffect(() => {
     api.get(`/event/${props.match.params.eventId}`).then(({ data }) => {
-      console.log(data)
       setEvent({
         id: data.event._id,
         title: data.event.title,
@@ -32,9 +31,13 @@ function EventInvitationForm(props) {
   }, [props.match.params.eventId])
 
   function submitInvitationForm(answers) {
-    axios
-      .post(process.env.REACT_APP_API_URL, answers)
-      .then((res) => {})
+    api
+      .post(`/event/${event.id}/submit-invitation`, answers)
+      .then((res) => {
+        if (res.status === 201) {
+          setIsStored(true)
+        }
+      })
       .catch(console.error)
   }
 
@@ -46,22 +49,28 @@ function EventInvitationForm(props) {
         <Grid container>
           <Grid item lg={2} sm={false} />
           <Grid item lg={8} sm={12}>
-            <Survey
-              onFinish={submitInvitationForm}
-              form={{
-                questions: questions.map(
-                  ({ id, content, answers, ...rest }) => {
-                    return {
-                      name: id,
-                      title: content,
-                      choices: answers.map((answer) => answer.content),
-                      type: 'checkbox',
-                      isRequired: true,
+            {isStored ? (
+              <Typography variant="h4" component="h4">
+                Your feedback was stored!
+              </Typography>
+            ) : (
+              <Survey
+                onFinish={submitInvitationForm}
+                form={{
+                  questions: questions.map(
+                    ({ _id, content, answers, ...rest }) => {
+                      return {
+                        name: _id,
+                        title: content,
+                        choices: answers.map((answer) => answer.content),
+                        type: 'checkbox',
+                        isRequired: true,
+                      }
                     }
-                  }
-                ),
-              }}
-            />
+                  ),
+                }}
+              />
+            )}
           </Grid>
           <Grid item lg={2} sm={false} />
         </Grid>
