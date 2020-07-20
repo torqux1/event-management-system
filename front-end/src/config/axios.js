@@ -5,14 +5,25 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL + '/api',
 })
 
-function updateHeaders() {
-  api.defaults.headers.common['Authorization'] = `Bearer ${
-    auth && auth.isLoggedIn() ? auth.getToken() : ''
-  }`
-}
+api.interceptors.request.use(
+  function (config) {
+    config.headers['Authorization'] = `Bearer ${
+      auth && auth.isLoggedIn() ? auth.getToken() : ''
+    }`
+    return config
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error)
+  }
+)
 
-updateHeaders()
+// function updateHeaders() {
+//   api.defaults.headers.common['Authorization'] = `Bearer ${
+//     auth && auth.isLoggedIn() ? auth.getToken() : ''
+//   }`
+// }
 
-export { api, updateHeaders }
+// updateHeaders()
 
-
+export { api }
