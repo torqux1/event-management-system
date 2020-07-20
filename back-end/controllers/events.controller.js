@@ -33,6 +33,7 @@ module.exports = {
                 event.description = req.body.description
                 event.date = req.body.date
                 event.time = req.body.time
+                event.questions = []
                 event.save()
 
                 if (req.body.questions) {
@@ -42,6 +43,8 @@ module.exports = {
                         questionEntity.event = event._id
                         questionEntity.answers = []
                         questionEntity.save()
+                        
+                        event.questions.push(questionEntity._id)
 
                         const uniqueAnswers = [...new Set(question.answers)]
 
@@ -58,6 +61,8 @@ module.exports = {
                     }
                 }
 
+                event.save()
+
                 res.json({
                     success: true,
                     message: 'Event created',
@@ -72,16 +77,31 @@ module.exports = {
         const event = await Event.findById(req.params.id)
 
         if (!event) {
-            res.json({
+            return res.json({
                 success: false,
                 message: 'No event found',
             })
         }
 
-        const questions = await Question.find({ event: event.id }).populate(
+        const questions = await Question.find({ event: event._id }).populate(
             'answers'
         )
         event.questions = questions
+        Event.aggregate([
+            {
+                $lookup: {
+                    from: 'usereventquestionanswers',
+                    localField: 'questions',
+                    foreignField: 'question',
+                    as: 'questionss',
+                },
+            },
+        ])
+            .exec()
+            .then((result) => {
+                console.log(result)
+            })
+            .catch(console.error)
 
         res.json({
             success: true,

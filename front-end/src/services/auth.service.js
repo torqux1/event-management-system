@@ -1,4 +1,17 @@
+import { updateHeaders } from './../config/axios'
+
 export default {
+  login: function (token) {
+    window.sessionStorage.setItem(
+      'auth',
+      JSON.stringify({
+        isLoggedIn: true,
+        token,
+      })
+    )
+
+    updateHeaders()
+  },
   parse: function () {
     return JSON.parse(window.sessionStorage.getItem('auth'))
   },

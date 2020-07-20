@@ -18,7 +18,6 @@ import auth from './../services/auth.service'
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(auth.isLoggedIn())
 
-
   return (
     <Router>
       <Header

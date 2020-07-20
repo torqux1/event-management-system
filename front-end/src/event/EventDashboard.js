@@ -11,7 +11,7 @@ import {
   Paper,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import api from './../config/axios.js'
+import { api } from './../config/axios.js'
 import EventDetails from './EventDetails.js'
 import EventStatistics from './EventStatistics.js'
 import moment from 'moment'

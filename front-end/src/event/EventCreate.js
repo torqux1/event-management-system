@@ -11,7 +11,7 @@ import {
 import EventForm from './CreationFlow/EventForm.js'
 import QuestionsForm from './CreationFlow/QuestionsForm.js'
 import OverviewAndComplete from './CreationFlow/OverviewAndComplete.js'
-import api from './../config/axios'
+import { api } from './../config/axios'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 

@@ -59,19 +59,20 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
 
 exports.auth = async (req, res, next) => {
     const authHeader = req.get('Authorization')
-    
+
     if (!authHeader) {
         return res.sendStatus(401)
     }
 
     try {
         const decoded = jwt.verify(authHeader.split(' ')[1], jwtSecret)
-
+        
         const user = await User.findById(decoded.userId)
 
         if (user) {
             req.user = user
         } else {
+            console.log('Hello from else')
             return res.sendStatus(401)
         }
     } catch (error) {

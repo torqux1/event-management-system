@@ -5,8 +5,14 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL + '/api',
 })
 
-api.defaults.headers.common['Authorization'] = `Bearer ${
-  auth.isLoggedIn() ? auth.getToken() : ''
-}`
+function updateHeaders() {
+  api.defaults.headers.common['Authorization'] = `Bearer ${
+    auth && auth.isLoggedIn() ? auth.getToken() : ''
+  }`
+}
 
-export default api
+updateHeaders()
+
+export { api, updateHeaders }
+
+

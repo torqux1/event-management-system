@@ -1,7 +1,6 @@
 const UserEventQuestionAnswer = require('./../models/user-event-question-answer.model')
     .model
 const Event = require('./../models/event.model').model
-const Question = require('./../models/question.model').model
 const Answer = require('./../models/answer.model').model
 
 module.exports = {

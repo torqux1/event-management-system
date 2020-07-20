@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import EventCard from './eventCard'
-import api from './../../config/axios'
+import { api } from './../../config/axios'
 import toast from 'toasted-notes'
 import 'toasted-notes/src/styles.css'
 
@@ -8,6 +8,7 @@ export default function EventList() {
   const [events, setEvents] = useState([])
 
   useEffect(() => {
+    console.log('before api get')
     api.get(`/event`).then(({ data }) => {
       if (data.success) {
         setEvents(data.events)

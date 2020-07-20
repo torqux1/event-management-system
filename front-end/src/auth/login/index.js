@@ -7,6 +7,7 @@ import SuccessAlert from '../../common/alerts/successAlert'
 import FailAlert from '../../common/alerts/failAlert'
 import { useHistory } from 'react-router-dom'
 import constants from '../../constants'
+import auth from './../../services/auth.service'
 
 function Login(props) {
   const history = useHistory()
@@ -28,17 +29,11 @@ function Login(props) {
       data: formData,
     })
       .then(function (response) {
-        console.log(`Response from server: ${response}`)
-        window.sessionStorage.setItem(
-          'auth',
-          JSON.stringify({
-            isLoggedIn: true,
-            token: response.data.accessToken,
-          })
-        )
+        auth.login(response.data.accessToken)
         props.handleLogin()
         setPromptMsg(constants.userMessages.SUCC_LOGIN)
         sethasLogged(true)
+        history.push('/')
       })
       .catch(function (error) {
         console.log('Error after request')
@@ -92,12 +87,7 @@ function Login(props) {
             Login
           </Button>
           {hasLogged ? (
-            <SuccessAlert
-              msg={promptMsg}
-              onClose={() => {
-                history.push('/')
-              }}
-            />
+            <SuccessAlert msg={promptMsg} onClose={() => {}} />
           ) : intStatus === 'fail' ? (
             <FailAlert msg={promptMsg} onClose={() => {}} />
           ) : null}

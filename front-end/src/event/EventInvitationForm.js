@@ -3,7 +3,7 @@ import EventDetails from './EventDetails.js'
 import { Grid, Typography } from '@material-ui/core'
 import Survey from 'material-survey/components/Survey'
 import moment from 'moment'
-import api from './../config/axios.js'
+import { api } from './../config/axios.js'
 
 function EventInvitationForm(props) {
   const [event, setEvent] = useState({})
