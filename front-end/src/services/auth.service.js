@@ -1,5 +1,3 @@
-//import { } from './../config/axios'
-
 export default {
   login: function (token) {
     window.localStorage.setItem(

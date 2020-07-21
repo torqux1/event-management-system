@@ -2,6 +2,8 @@ const indicative = require('indicative/validator')
 const Event = require('./../models/event.model.js').model
 const Question = require('./../models/question.model.js').model
 const Answer = require('./../models/answer.model.js').model
+const mongoose = require('mongoose')
+const groupBy = require('./../common/helpers').groupBy
 
 module.exports = {
     index: (req, res) => {
@@ -43,7 +45,7 @@ module.exports = {
                         questionEntity.event = event._id
                         questionEntity.answers = []
                         questionEntity.save()
-                        
+
                         event.questions.push(questionEntity._id)
 
                         const uniqueAnswers = [...new Set(question.answers)]
@@ -74,39 +76,77 @@ module.exports = {
             })
     },
     show: async (req, res) => {
-        const event = await Event.findById(req.params.id)
+        try {
+            const event = await Event.aggregate([
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(req.params.id),
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'usereventquestionanswers',
+                        localField: 'questions',
+                        foreignField: 'question',
+                        as: 'savedAnswers',
+                    }, // ТОДО: possibly delete
+                },
+            ])
+                .exec()
+                .then(async (result) => {
+                    const event = result[0]
+                    if (!event) {
+                        return res.json({
+                            success: false,
+                            message: 'No event found',
+                        })
+                    }
 
-        if (!event) {
+                    Event.generateStatistics(event.questions)
+                        .then(async (items) => {
+                            for (const item of items) {
+                                item.savedAnswers = groupBy(
+                                    item.savedAnswers,
+                                    'answer'
+                                )
+                            }
+
+                            for (const item of items) {
+                                item.answers = []
+                                for (const answerId in item.savedAnswers) {
+                                    let answer = await Answer.findById(answerId)
+
+                                    item.answers.push({
+                                        id: answer._id,
+                                        name: answer.content,
+                                        value:
+                                            item.savedAnswers[answerId].length,
+                                    })
+
+                                    delete item.savedAnswers[answerId]
+                                }
+                            }
+
+                            res.json({
+                                success: true,
+                                event,
+                                statistics: items,
+                            })
+                        })
+                        .catch(console.error)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    return res.json({
+                        success: false,
+                        message: 'Error',
+                    })
+                })
+        } catch (error) {
             return res.json({
                 success: false,
-                message: 'No event found',
+                message: 'Invalid event id',
             })
         }
-
-        const questions = await Question.find({ event: event._id }).populate(
-            'answers'
-        )
-        event.questions = questions
-        Event.aggregate([
-            {
-                $lookup: {
-                    from: 'usereventquestionanswers',
-                    localField: 'questions',
-                    foreignField: 'question',
-                    as: 'questionss',
-                },
-            },
-        ])
-            .exec()
-            .then((result) => {
-                console.log(result)
-            })
-            .catch(console.error)
-
-        res.json({
-            success: true,
-            event,
-            statistics: [],
-        })
     },
 }

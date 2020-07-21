@@ -18,12 +18,4 @@ api.interceptors.request.use(
   }
 )
 
-// function updateHeaders() {
-//   api.defaults.headers.common['Authorization'] = `Bearer ${
-//     auth && auth.isLoggedIn() ? auth.getToken() : ''
-//   }`
-// }
-
-// updateHeaders()
-
 export { api }

@@ -24,7 +24,6 @@ function EventDashboard(props) {
 
   useEffect(() => {
     api.get(`/event/${props.match.params.id}`).then(({ data }) => {
-      console.log(data)
       setEvent({
         id: data.event._id,
         title: data.event.title,
