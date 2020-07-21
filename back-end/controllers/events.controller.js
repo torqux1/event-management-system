@@ -36,6 +36,7 @@ module.exports = {
                 event.description = req.body.description
                 event.date = req.body.date
                 event.time = req.body.time
+                event.user = req.user._id
                 event.questions = []
                 event.save()
 
@@ -78,7 +79,8 @@ module.exports = {
     },
     show: async (req, res) => {
         try {
-            const event = await Event.findById(req.params.id)
+            const event = await Event.findById(req.params.id).populate('user')
+
             if (!event) {
                 return res.json({
                     success: false,
@@ -88,7 +90,7 @@ module.exports = {
 
             const questions = await Question.find({
                 event: event._id,
-            }).populate('answers')
+            }).populate('answers')            
             event.questions = questions
 
             Event.generateStatistics(event.questions).then(async (items) => {
@@ -127,7 +129,7 @@ module.exports = {
         } catch (error) {
             res.json({
                 success: false,
-                message: 'Error',
+                message: 'Error: ' + error,
             })
         }
     },

@@ -33,10 +33,9 @@ function EventDashboard(props) {
         ).format('HH:mm')}`,
       })
       setStatistics(data.statistics)
-    })
-
-    setHost({
-      fullName: 'Pesho Goshov',
+      setHost({
+        fullName: `${data.event.user.firstName} ${data.event.user.lastName}`,
+      })
     })
   }, [props.match.params.id])
 

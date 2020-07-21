@@ -9,6 +9,7 @@ const eventSchema = new mongoose.Schema({
     description: String,
     date: Date,
     time: Date,
+    user: { type: Schema.Types.ObjectId, ref: 'Users' },
     questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
 })
 

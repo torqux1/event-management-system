@@ -72,7 +72,6 @@ exports.auth = async (req, res, next) => {
         if (user) {
             req.user = user
         } else {
-            console.log('Hello from else')
             return res.sendStatus(401)
         }
     } catch (error) {
