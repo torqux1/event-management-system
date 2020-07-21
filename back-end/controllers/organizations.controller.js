@@ -6,10 +6,12 @@ module.exports = {
         indicative
             .validate(req.body, {
                 title: 'required|string|max:255',
+                description: 'required|string|max:65000',
             })
             .then(async (data) => {
                 const organization = await Organization.create({
                     title: data.title,
+                    description: data.description,
                     owner: req.user._id,
                 })
                 return res.json({
@@ -25,7 +27,9 @@ module.exports = {
             })
     },
     show: async (req, res) => {
-        const organization = await Organization.findById(req.params.id)
+        const organization = await Organization.findById(
+            req.params.id
+        ).populate('owner')
 
         if (organization) {
             res.json({

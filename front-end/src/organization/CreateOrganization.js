@@ -12,17 +12,20 @@ import toast from 'toasted-notes'
 
 export default function CreateOrganization({ open, handleClose }) {
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const history = useHistory()
 
   const handleCreate = () => {
     api
       .post('/organization/create', {
         title,
+        description,
       })
       .then(({ data }) => {
         if (data.success) {
           handleClose()
           setTitle('')
+          setDescription('')
           history.push('/organization/' + data.organization._id)
         }
       })
@@ -51,6 +54,18 @@ export default function CreateOrganization({ open, handleClose }) {
             type="text"
             fullWidth
             onChange={(event) => setTitle(event.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="description"
+            name="description"
+            label="Description"
+            type="text"
+            multiline
+            rows={3}
+            fullWidth
+            onChange={(event) => setDescription(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
