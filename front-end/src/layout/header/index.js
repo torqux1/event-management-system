@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import { Link, useHistory } from 'react-router-dom'
 import { useStyles } from './styles'
 import auth from './../../services/auth.service'
+import CrateOrganization from './../../organization/CreateOrganization'
 
 function Header(props) {
   const classes = useStyles()
+  const [organizationFormOpen, setOrganizationFormOpen] = useState(false)
   let history = useHistory()
 
   return (
@@ -22,7 +24,23 @@ function Header(props) {
               <Button className={classes.navLink}>Create event</Button>
             </Link>
             <Link to="/meeting/create">
-              <Button className={classes.navLink}>Create new meeting</Button>
+              <Button className={classes.navLink}>Create meeting</Button>
+            </Link>
+            <Link to="#">
+              <Button
+                className={classes.navLink}
+                onClick={() => {
+                  setOrganizationFormOpen(true)
+                }}
+              >
+                Create organization
+              </Button>
+              <CrateOrganization
+                open={organizationFormOpen}
+                handleClose={() => {
+                  setOrganizationFormOpen(false)
+                }}
+              />
             </Link>
             <Link to="#">
               <Button

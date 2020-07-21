@@ -10,6 +10,7 @@ api.interceptors.request.use(
     config.headers['Authorization'] = `Bearer ${
       auth && auth.isLoggedIn() ? auth.getToken() : ''
     }`
+       config.headers['Accept'] = 'application/json'
     return config
   },
   function (error) {
