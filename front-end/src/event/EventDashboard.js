@@ -28,6 +28,7 @@ function EventDashboard(props) {
         id: data.event._id,
         title: data.event.title,
         description: data.event.description,
+        organization: data.event.organization,
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
           data.event.time
         ).format('HH:mm')}`,

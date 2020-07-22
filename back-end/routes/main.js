@@ -20,6 +20,10 @@ router.get('/event', auth, eventsController.index)
 
 // Organizations
 router.post('/organization/create', auth, organizationsController.create)
+router.get('/organization/get-own', auth, organizationsController.getOwnOrganizations)
 router.get('/organization/:id', organizationsController.show)
+router.get('/organization/:id/events', organizationsController.getEvents)
+router.post('/organization/:id/post/create', auth, organizationsController.createPost)
+router.get('/organization/:id/post', organizationsController.posts)
 
 module.exports = router

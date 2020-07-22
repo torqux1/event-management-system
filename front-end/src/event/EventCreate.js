@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Stepper,
@@ -38,7 +38,20 @@ function EventCreate() {
   const [time, setTime] = useState(new Date())
   const [questions, setQuestions] = useState([])
   const [newQuestionContent, setNewQuestionContent] = useState('')
+  const [organization, setOrganization] = useState('')
+  const [organizations, setOrganizations] = useState([])
   const steps = ['Event parameters', 'Questions', 'Overview and complete']
+
+  useEffect(() => {
+    api
+      .get('/organization/get-own')
+      .then(({ data }) => {
+        if (data.success) {
+          setOrganizations(data.organizations)
+        }
+      })
+      .catch(console.error)
+  }, [])
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
@@ -48,6 +61,7 @@ function EventCreate() {
           description,
           date,
           time,
+          organization,
           questions,
         })
         .then(({ data }) => {
@@ -56,6 +70,8 @@ function EventCreate() {
           setDate(new Date())
           setTime(new Date())
           setQuestions([])
+          setOrganization('')
+          setOrganizations([])
           setNewQuestionContent('')
 
           history.push('/event/' + data.event._id)
@@ -106,6 +122,9 @@ function EventCreate() {
             description={description}
             date={date}
             time={time}
+            organization={organization}
+            organizations={organizations}
+            setOrganization={setOrganization}
             setTitle={setTitle}
             setDescription={setDescription}
             setDate={setDate}

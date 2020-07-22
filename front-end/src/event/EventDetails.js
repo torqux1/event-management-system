@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Typography, Paper } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 function EventDetails(props) {
   const { event, host, my = 3 } = props
@@ -17,7 +18,14 @@ function EventDetails(props) {
             <Box>
               Hosted by:
               <Typography variant="subtitle2" gutterBottom>
-                {host.fullName}
+                {host.fullName}{' '}
+                {event.organization ? (
+                  <Link to={'/organization/' + event.organization._id}>
+                    {'and ' + event.organization.title}
+                  </Link>
+                ) : (
+                  ''
+                )}
               </Typography>
             </Box>
           ) : (

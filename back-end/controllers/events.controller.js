@@ -28,17 +28,19 @@ module.exports = {
                 description: 'required|string',
                 date: 'required|date',
                 time: 'required|date',
+                organization: 'string',
                 questions: 'array',
             })
-            .then(() => {
+            .then(async () => {
                 const event = new Event()
                 event.title = req.body.title
                 event.description = req.body.description
                 event.date = req.body.date
                 event.time = req.body.time
                 event.user = req.user._id
+                event.organization = req.body.organization
                 event.questions = []
-                event.save()
+                await event.save()
 
                 if (req.body.questions) {
                     for (const question of req.body.questions) {
@@ -65,7 +67,7 @@ module.exports = {
                     }
                 }
 
-                event.save()
+                await event.save()
 
                 res.json({
                     success: true,
@@ -79,7 +81,10 @@ module.exports = {
     },
     show: async (req, res) => {
         try {
-            const event = await Event.findById(req.params.id).populate('user')
+            const event = await Event.findById(req.params.id).populate([
+                'user',
+                'organization',
+            ])
 
             if (!event) {
                 return res.json({
@@ -90,7 +95,7 @@ module.exports = {
 
             const questions = await Question.find({
                 event: event._id,
-            }).populate('answers')            
+            }).populate('answers')
             event.questions = questions
 
             Event.generateStatistics(event.questions).then(async (items) => {

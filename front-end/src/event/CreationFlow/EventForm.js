@@ -1,6 +1,13 @@
 import 'date-fns'
 import React from 'react'
-import { TextField, Grid, Container } from '@material-ui/core'
+import {
+  TextField,
+  Grid,
+  Container,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core'
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -40,6 +47,24 @@ function EventForm(props) {
             value={props.description}
             onChange={(event) => props.setDescription(event.target.value)}
           />
+          <InputLabel id="demo-simple-select-outlined-label">
+            Organization
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={props.organization}
+            onChange={(event) => props.setOrganization(event.target.value)}
+            label="Organization"
+          >
+            {props.organizations.map((org) => {
+              return (
+                <MenuItem value={org._id} key={org._id}>
+                  {org.title}
+                </MenuItem>
+              )
+            })}
+          </Select>
 
           <Grid container>
             <Grid item xs={12} sm={5}>

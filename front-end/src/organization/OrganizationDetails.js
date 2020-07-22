@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography, Paper } from '@material-ui/core'
 
-function OrganizationDetails({ title, description, owner }) {
+function OrganizationDetails({ title, description, owner, organization }) {
   return (
     <Box>
       <Paper>

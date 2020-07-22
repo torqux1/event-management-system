@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { api } from './../config/axios'
 import OrganizationDetails from './OrganizationDetails'
-import { Box, Grid, List, ListItem, ListItemText } from '@material-ui/core'
+import { Box, Grid, List, ListItemText } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-
+import moment from 'moment'
+import ListItemLink from './../common/ListItemLink'
+import OrganizationFeed from './../organization/OrganizationFeed'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 function OrganizationDashboard(props) {
   const [organization, setOrganization] = useState({})
+  const [events, setEvents] = useState([])
   const [dataLoaded, setDataLoaded] = useState(false)
   const classes = useStyles()
 
@@ -24,6 +27,13 @@ function OrganizationDashboard(props) {
       .then(({ data }) => {
         setOrganization(data.organization)
         setDataLoaded(true)
+      })
+      .catch(console.error)
+
+    api
+      .get(`/organization/${props.match.params.id}/events`)
+      .then(({ data }) => {
+        setEvents(data.events)
       })
       .catch(console.error)
   }, [props.match.params.id])
@@ -41,18 +51,18 @@ function OrganizationDashboard(props) {
           ) : (
             ''
           )}
+          <OrganizationFeed organizationId={organization._id} />
         </Grid>
         <Grid item lg={2} md={2} sm={false}>
           <List className={classes.root}>
-            <ListItem>
-              <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Work" secondary="Jan 7, 2014" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Vacation" secondary="July 20, 2014" />
-            </ListItem>
+            {events.map((event) => (
+              <ListItemLink href={`/event/${event._id}`} key={event._id}>
+                <ListItemText
+                  primary={event.title}
+                  secondary={moment().format('D MMM, YYYY')}
+                />
+              </ListItemLink>
+            ))}
           </List>
         </Grid>
       </Grid>
