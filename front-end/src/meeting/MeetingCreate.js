@@ -16,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -32,20 +33,15 @@ function MeetingCreate(props) {
   const [description, setDescription] = useState('')
   const [date, setDate] = useState(new Date())
   const [time, setTime] = useState(new Date())
-  const [eventId, setEventId] = useState(undefined)
+  const [event, setEvent] = useState('')
   const [events, setEvents] = useState([])
   const classes = useStyles()
+  const history = useHistory()
 
   useEffect(() => {
-    // TODO - get events only for the creator
-    api.get(`/event`).then(({ data }) => {
-      console.log('Data' + JSON.stringify(data))
+    api.get(`/event/get-own`).then(({ data }) => {
       if (data.success) {
-        setEvents(
-          data.events.map((event) => {
-            return { id: event._id, title: event.title }
-          })
-        )
+        setEvents(data.events)
       } else {
         toast.notify('Error', {
           position: 'bottom-right',
@@ -55,31 +51,33 @@ function MeetingCreate(props) {
     })
   }, [])
 
-  const handleSelectEvent = (event) => {
-    console.log('Setting event:' + event.target.value)
-    setEventId(event.target.value)
-  }
-  // BIG TODO - POST TO DB
   function handleSubmit() {
-    const formData = {
-      title: title,
-      description: description,
-      date: date,
-      time: setTime,
-    }
     api
-      .post({
-        method: 'post',
-        url: '/meeting',
-        data: formData,
+      .post(`/meeting/create`, {
+        title,
+        description,
+        date,
+        time,
+        event,
       })
-      .then((response) => {
-        console.log(`Response from server: ${response}`)
+      .then(({ data }) => {
+        if (data.success) {
+          toast.notify('Meeting created', {
+            position: 'bottom-right',
+            duration: 1500,
+          })
+          console.log(data)
+          history.push('/event/' + data.meeting.event._id)
+        } else {
+          toast.notify('Error: ' + data.message, {
+            position: 'bottom-right',
+            duration: 1500,
+          })
+        }
       })
       .catch((error) => {
-        console.log('Error after request')
-        console.error(error.response)
-        if (error.response.status === 400) {
+        console.log(error)
+        if (error.response && error.response.status === 400) {
           return
         }
       })
@@ -117,6 +115,26 @@ function MeetingCreate(props) {
             onChange={(event) => setDescription(event.target.value)}
           />
 
+          <FormControl className={classes.formControl}>
+            <InputLabel id="select-label">Select event</InputLabel>
+            <Select
+              labelId="select-label"
+              id="demo-select-labelt"
+              value={event}
+              onChange={(e) => {
+                setEvent(e.target.value)
+              }}
+            >
+              {events.map((event) => {
+                return (
+                  <MenuItem key={event._id} value={event._id}>
+                    {event.title}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+
           <Grid container>
             <Grid item xs={12} sm={5}>
               <KeyboardTimePicker
@@ -149,32 +167,14 @@ function MeetingCreate(props) {
           </Grid>
         </form>
 
-        <div>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="select-label">Select event</InputLabel>
-            <Select
-              labelId="select-label"
-              id="demo-select-labelt"
-              value={events}
-              onChange={handleSelectEvent}
-            >
-              {events.map((event) => {
-                return <MenuItem value={event.id}>{event.title}</MenuItem>
-              })}
-            </Select>
-          </FormControl>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleSubmit}
-          >
-            {' '}
-            Create meeting
-          </Button>
-        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleSubmit}
+        >
+          Create meeting
+        </Button>
       </Container>
     </MuiPickersUtilsProvider>
   )

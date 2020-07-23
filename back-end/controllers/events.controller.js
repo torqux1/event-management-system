@@ -38,7 +38,9 @@ module.exports = {
                 event.date = req.body.date
                 event.time = req.body.time
                 event.user = req.user._id
-                event.organization = req.body.organization
+                if (req.body.organization) {
+                    event.organization = req.body.organization
+                }
                 event.questions = []
                 await event.save()
 
@@ -137,5 +139,24 @@ module.exports = {
                 message: 'Error: ' + error,
             })
         }
+    },
+    getOwn: (req, res) => {
+        Event.find(
+            {
+                user: req.user._id,
+            },
+            (err, results) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                    })
+                }
+
+                return res.json({
+                    success: true,
+                    events: results,
+                })
+            }
+        )
     },
 }

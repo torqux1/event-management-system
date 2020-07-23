@@ -65,6 +65,7 @@ function EventCreate() {
           questions,
         })
         .then(({ data }) => {
+          console.log(data)
           setTitle('')
           setDescription('')
           setDate(new Date())
