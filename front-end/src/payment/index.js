@@ -1,9 +1,9 @@
 import 'date-fns'
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { api } from './../config/axios'
 import toast from 'toasted-notes'
-import { TextField, Container } from '@material-ui/core'
-import paymentIcons from './payment_icons.jpg'
+import { TextField,  Container } from '@material-ui/core'
+import paymentIcons from './payment_icons.jpg';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
