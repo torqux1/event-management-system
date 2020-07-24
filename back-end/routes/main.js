@@ -4,6 +4,7 @@ const eventsController = require('./../controllers/events.controller')
 const organizationsController = require('./../controllers/organizations.controller')
 const invitationsController = require('../controllers/invitations.controller')
 const meetingsController = require('../controllers/meetings.controller')
+const paymentsController = require('../controllers/payments.controller')
 const auth = require('./../authorization/middlewares/verify.user.middleware')
     .auth
 
@@ -34,7 +35,9 @@ router.post(
 )
 router.get('/organization/:id/post', organizationsController.posts)
 
-// Meeting
 router.post('/meeting/create', auth, meetingsController.create)
+
+router.post('/payment/create', auth, paymentsController.create)
+
 
 module.exports = router

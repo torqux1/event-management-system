@@ -13,6 +13,8 @@ import auth from './../services/auth.service'
 import MeetingCreate from './../meeting/MeetingCreate.js'
 import toast from 'toasted-notes'
 import constants from './../constants/index'
+import PaymentCreate from './../payment/'
+
 
 //import MeetingBox from "./../meeting/index.js";
 
@@ -66,6 +68,7 @@ function Navigation() {
         <Route path="/event/create" component={EventCreate} />
         <Route path="/event/:id" component={EventDashboard} />
         <Route path="/meeting/create" component={MeetingCreate} />
+        <Route path="/payment/create" component={PaymentCreate} />
 
         <Route path="/organization/:id" component={OrganizationDashboard} />
       </Switch>
