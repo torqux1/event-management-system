@@ -5,10 +5,11 @@ import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import SuccessAlert from '../../common/alerts/successAlert'
 import FailAlert from '../../common/alerts/failAlert'
-import { useHistory } from 'react-router-dom'
 import constants from '../../constants'
+import auth from './../../services/auth.service'
+import { useHistory } from 'react-router-dom'
 
-function Register() {
+function Register(props) {
   const history = useHistory()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,9 +34,13 @@ function Register() {
       data: formData,
     })
       .then((response) => {
-        console.log(`Response from server: ${response}`)
+        auth.login(response.data.accessToken)
+        props.handleLogin()
         setHasRegister(true)
         setPromptMsg(constants.userMessages.SUCC_REGISTER)
+        if (props.redirect) {
+          history.push('/')
+        }
       })
       .catch((error) => {
         console.log('Error after request')
@@ -120,12 +125,7 @@ function Register() {
             Register
           </Button>
           {hasRegistered ? (
-            <SuccessAlert
-              msg={promptMsg}
-              onClose={() => {
-                history.push('/login')
-              }}
-            />
+            <SuccessAlert msg={promptMsg} />
           ) : intStatus === 'fail' ? (
             <FailAlert msg={promptMsg} onClose={() => {}} />
           ) : null}

@@ -5,8 +5,10 @@ import Button from '@material-ui/core/Button'
 import axios from 'axios'
 import SuccessAlert from '../../common/alerts/successAlert'
 import FailAlert from '../../common/alerts/failAlert'
-import { useHistory } from 'react-router-dom'
 import constants from '../../constants'
+
+import { useHistory } from 'react-router-dom'
+
 import auth from './../../services/auth.service'
 
 function Login(props) {
@@ -31,9 +33,9 @@ function Login(props) {
       .then(function (response) {
         auth.login(response.data.accessToken)
         props.handleLogin()
-        setPromptMsg(constants.userMessages.SUCC_LOGIN)
-        sethasLogged(true)
-        history.push('/')
+        if (props.redirect) {
+          history.push('/')
+        }
       })
       .catch(function (error) {
         console.log('Error after request')

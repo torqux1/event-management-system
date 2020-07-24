@@ -11,6 +11,8 @@ import EventCreate from './../event/EventCreate.js'
 import EventInvitationForm from './../event/EventInvitationForm.js'
 import auth from './../services/auth.service'
 import MeetingCreate from './../meeting/MeetingCreate.js'
+import toast from 'toasted-notes'
+import constants from './../constants/index'
 
 //import MeetingBox from "./../meeting/index.js";
 
@@ -38,10 +40,25 @@ function Navigation() {
               handleLogin={() => {
                 setIsLoggedIn(true)
               }}
+              redirect={true}
             />
           )}
         />
-        <Route path="/register" component={Register} />
+        <Route
+          path="/register"
+          render={() => (
+            <Register
+              handleLogin={() => {
+                setIsLoggedIn(true)
+                toast.notify('You are now logged in', {
+                  position: 'bottom-right',
+                  duration: 3,
+                })
+              }}
+              redirect={true}
+            />
+          )}
+        />
         <Route
           path="/event/invitation/:eventId"
           component={EventInvitationForm}

@@ -10,7 +10,7 @@ const auth = require('./../authorization/middlewares/verify.user.middleware')
 // Events
 router.post('/event/create', auth, eventsController.create)
 router.get('/event/get-own', auth, eventsController.getOwn)
-router.get('/event/:id', auth, eventsController.show)
+router.get('/event/:id', eventsController.show)
 router.post(
     '/event/:eventId/submit-invitation',
     auth,

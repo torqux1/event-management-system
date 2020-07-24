@@ -44,7 +44,6 @@ exports.isPasswordAndUserMatch = (req, res, next) => {
                 req.body = {
                     userId: user[0]._id,
                     email: user[0].email,
-
                     name: user[0].firstName + ' ' + user[0].lastName,
                 }
                 return next()

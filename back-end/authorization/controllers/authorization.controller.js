@@ -16,4 +16,22 @@ exports.login = (req, res) => {
 
 exports.register = (req, res) => {
     UsersController.insert(req, res)
+        .then((results) => {
+            if (results) {
+                let token = jwt.sign(
+                    {
+                        userId: results._id,
+                        email: req.body.email,
+                        name: results.firstName + ' ' + results.lastName,
+                    },
+                    jwtSecret
+                )
+                res.status(200).send({ accessToken: token })
+            }
+        })
+        .catch(() => {
+            res.json({
+                succes: false,
+            })
+        })
 }

@@ -4,12 +4,17 @@ import { Grid, Typography } from '@material-ui/core'
 import Survey from 'material-survey/components/Survey'
 import moment from 'moment'
 import { api } from './../config/axios.js'
+import LoginDialog from './LoginDialog'
+import auth from './../services/auth.service'
+import toast from 'toasted-notes'
 
 function EventInvitationForm(props) {
   const [event, setEvent] = useState({})
   const [host, setHost] = useState({})
   const [questions, setQuestions] = useState([])
+  const [answers, setAnswers] = useState([])
   const [isStored, setIsStored] = useState(false)
+  const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
 
   useEffect(() => {
     api.get(`/event/${props.match.params.eventId}`).then(({ data }) => {
@@ -23,12 +28,25 @@ function EventInvitationForm(props) {
       })
 
       setQuestions(data.event.questions)
-    })
 
-    setHost({
-      fullName: 'Pesho Goshov',
+      setHost({
+        fullName: `${data.event.user.firstName} ${data.event.user.lastName}`,
+      })
     })
   }, [props.match.params.eventId])
+
+  function handleFinish(answers) {
+    if (auth.isLoggedIn()) {
+      submitInvitationForm(answers)
+    } else {
+      setIsLoginDialogOpen(true)
+      setAnswers(answers)
+      toast.notify('You need to login first', {
+        position: 'bottom-right',
+        duration: 1500,
+      })
+    }
+  }
 
   function submitInvitationForm(answers) {
     api
@@ -36,6 +54,7 @@ function EventInvitationForm(props) {
       .then((res) => {
         if (res.status === 201) {
           setIsStored(true)
+          setIsLoginDialogOpen(false)
         }
       })
       .catch(console.error)
@@ -46,6 +65,22 @@ function EventInvitationForm(props) {
       <Grid item lg={1} sm={false} />
       <Grid item lg={10} sm={12}>
         <EventDetails event={event} host={host} />
+        <LoginDialog
+          open={isLoginDialogOpen}
+          handleClickOpen={() => {
+            setIsLoginDialogOpen(true)
+          }}
+          handleClose={() => {
+            setIsLoginDialogOpen(false)
+          }}
+          handleLogin={() => {
+            submitInvitationForm(answers)
+               toast.notify('You are now logged in', {
+                 position: 'bottom-right',
+                 duration: 3,
+               })
+          }}
+        />
         <Grid container>
           <Grid item lg={2} sm={false} />
           <Grid item lg={8} sm={12}>
@@ -55,7 +90,7 @@ function EventInvitationForm(props) {
               </Typography>
             ) : (
               <Survey
-                onFinish={submitInvitationForm}
+                onFinish={handleFinish}
                 form={{
                   questions: questions.map(
                     ({ _id, content, answers, ...rest }) => {
