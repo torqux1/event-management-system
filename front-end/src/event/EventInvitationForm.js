@@ -7,6 +7,7 @@ import { api } from './../config/axios.js'
 import LoginDialog from './LoginDialog'
 import auth from './../services/auth.service'
 import toast from 'toasted-notes'
+import Payment from '../payment'
 
 function EventInvitationForm(props) {
   const [event, setEvent] = useState({})
@@ -15,6 +16,9 @@ function EventInvitationForm(props) {
   const [answers, setAnswers] = useState([])
   const [isStored, setIsStored] = useState(false)
   const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
+  const [hasUserPaid, setHasUserPaid] = useState(false)
+
+  
 
   useEffect(() => {
     api.get(`/event/${props.match.params.eventId}`).then(({ data }) => {
@@ -25,6 +29,7 @@ function EventInvitationForm(props) {
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
           data.event.time
         ).format('HH:mm')}`,
+        price: 90 // TODO set Number(data.event.price)
       })
 
       setQuestions(data.event.questions)
@@ -84,10 +89,20 @@ function EventInvitationForm(props) {
         <Grid container>
           <Grid item lg={2} sm={false} />
           <Grid item lg={8} sm={12}>
-            {isStored ? (
+            {event.price === 0 && isStored ? (
               <Typography variant="h4" component="h4">
                 Your feedback was stored!
               </Typography>
+            ) : isStored && event.price !== 0 && hasUserPaid ? (
+                <Typography variant="h4" component="h4">
+                  Your feedback was stored! Payment has been successful!
+                </Typography>
+            ) : isStored && event.price !== 0 && !hasUserPaid ? (
+            <Payment
+              eventId={event.id}
+              price={event.price}
+              onFinish={setHasUserPaid}
+            />
             ) : (
               <Survey
                 onFinish={handleFinish}
