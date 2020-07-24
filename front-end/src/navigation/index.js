@@ -12,7 +12,6 @@ import EventInvitationForm from './../event/EventInvitationForm.js'
 import auth from './../services/auth.service'
 import MeetingCreate from './../meeting/MeetingCreate.js'
 import toast from 'toasted-notes'
-import constants from './../constants/index'
 import PaymentCreate from './../payment/'
 
 

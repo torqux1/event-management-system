@@ -15,6 +15,7 @@ import { api } from './../config/axios.js'
 import EventDetails from './EventDetails.js'
 import EventStatistics from './EventStatistics.js'
 import moment from 'moment'
+import MeetingBox from './../meeting/MeetingBox'
 
 function EventDashboard(props) {
   let [event, setEvent] = useState({})
@@ -24,11 +25,13 @@ function EventDashboard(props) {
 
   useEffect(() => {
     api.get(`/event/${props.match.params.id}`).then(({ data }) => {
+      console.log(data)
       setEvent({
         id: data.event._id,
         title: data.event.title,
         description: data.event.description,
         organization: data.event.organization,
+        meeting: data.meeting,
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
           data.event.time
         ).format('HH:mm')}`,
@@ -165,6 +168,15 @@ function EventDashboard(props) {
         </Grid>
         <Grid item lg={1} md={1} sm={false} />
       </Grid>
+      {event.meeting ? (
+        <MeetingBox
+          id={event.meeting._id}
+          title={event.meeting.title}
+          subtitle={event.meeting.description}
+        />
+      ) : (
+        ''
+      )}
     </Box>
   )
 }

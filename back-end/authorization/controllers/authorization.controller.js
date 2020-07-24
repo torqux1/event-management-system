@@ -8,7 +8,12 @@ exports.login = (req, res) => {
     console.log('Generating token')
     try {
         let token = jwt.sign(req.body, jwtSecret)
-        res.status(200).send({ accessToken: token })
+        res.status(200).send({
+            accessToken: token,
+            userId: req.body.userId,
+            email: req.body.email,
+            name: req.body.name,
+        })
     } catch (err) {
         res.status(500).send({ errors: err })
     }
@@ -18,15 +23,21 @@ exports.register = (req, res) => {
     UsersController.insert(req, res)
         .then((results) => {
             if (results) {
+                const name = results.firstName + ' ' + results.lastName
                 let token = jwt.sign(
                     {
                         userId: results._id,
                         email: req.body.email,
-                        name: results.firstName + ' ' + results.lastName,
+                        name,
                     },
                     jwtSecret
                 )
-                res.status(200).send({ accessToken: token })
+                res.status(200).send({
+                    accessToken: token,
+                    userId: results._id,
+                    email: req.body.email,
+                    name,
+                })
             }
         })
         .catch(() => {

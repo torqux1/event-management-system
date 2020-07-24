@@ -1,10 +1,14 @@
 export default {
-  login: function (token) {
+  login: function (data) {
+    console.log(data)
     window.localStorage.setItem(
       'auth',
       JSON.stringify({
         isLoggedIn: true,
-        token,
+        token: data.accessToken,
+        email: data.email,
+        userId: data.userId,
+        name: data.name,
       })
     )
   },

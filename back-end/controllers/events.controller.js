@@ -2,6 +2,7 @@ const indicative = require('indicative/validator')
 const Event = require('./../models/event.model.js').model
 const Question = require('./../models/question.model.js').model
 const Answer = require('./../models/answer.model.js').model
+const Meeting = require('./../models/meeting.model.js').model
 const mongoose = require('mongoose')
 const groupBy = require('./../common/helpers').groupBy
 const isObjEmpty = require('./../common/helpers').isObjEmpty
@@ -95,6 +96,10 @@ module.exports = {
                 })
             }
 
+            const meeting = await Meeting.findOne({
+                event: event._id
+            })
+
             const questions = await Question.find({
                 event: event._id,
             }).populate('answers')
@@ -130,6 +135,7 @@ module.exports = {
                 res.json({
                     success: true,
                     event,
+                    meeting,
                     statistics: items,
                 })
             })

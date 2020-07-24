@@ -8,7 +8,7 @@ function EventStatistics(props) {
     <React.Fragment>
       <Grid container>
         {statistics.map((question) => (
-          <Grid key={question.id} item lg={6} sm={12}>
+          <Grid key={question._id} item lg={6} sm={12}>
             <QuestionChart question={question} />
           </Grid>
         ))}

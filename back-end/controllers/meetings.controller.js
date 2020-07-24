@@ -1,4 +1,5 @@
 const Meeting = require('./../models/meeting.model').model
+const Message = require('./../models/message.model').model
 const indicative = require('indicative/validator')
 
 module.exports = {
@@ -45,6 +46,24 @@ module.exports = {
                 return res.json({
                     success: false,
                     message: error,
+                })
+            })
+    },
+    getAllMessages: (req, res) => {
+        Message.find({
+            meeting: req.params.id,
+        })
+            .populate('user')
+            .exec((err, result) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                    })
+                }
+
+                return res.json({
+                    success: true,
+                    messages: result,
                 })
             })
     },

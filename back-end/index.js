@@ -2,32 +2,29 @@ const config = require('./common/config/env.config.js')
 
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
 
+// Sockets
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
+http.listen(config.socketPort)
+const meetingService = require('./sevices/meeting')
+meetingService.connectSocket(io)
+
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+
+// Cors
+app.use(require('./common/middlewares/cors.middleware'))
+
+// Routers
 const mainRouter = require('./routes/main.js')
 const AuthorizationRouter = require('./authorization/routes.config')
 const UsersRouter = require('./users/routes.config')
-
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Credentials', 'true')
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE')
-    res.header('Access-Control-Expose-Headers', 'Content-Length')
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Accept, Authorization, Content-Type, X-Requested-With, Range'
-    )
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200)
-    } else {
-        return next()
-    }
-})
-
-app.use(bodyParser.json())
 AuthorizationRouter.routesConfig(app)
 UsersRouter.routesConfig(app)
 app.use('/api', mainRouter)
+
 
 app.listen(config.port, function () {
     console.log('app listening at port %s', config.port)

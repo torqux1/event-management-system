@@ -34,7 +34,7 @@ function Register(props) {
       data: formData,
     })
       .then((response) => {
-        auth.login(response.data.accessToken)
+        auth.login(response.data)
         props.handleLogin()
         setHasRegister(true)
         setPromptMsg(constants.userMessages.SUCC_REGISTER)

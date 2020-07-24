@@ -31,7 +31,7 @@ function Login(props) {
       data: formData,
     })
       .then(function (response) {
-        auth.login(response.data.accessToken)
+        auth.login(response.data)
         props.handleLogin()
         if (props.redirect) {
           history.push('/')
