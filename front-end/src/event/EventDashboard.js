@@ -17,13 +17,17 @@ import EventStatistics from './EventStatistics.js'
 import moment from 'moment'
 import MeetingBox from './../meeting/MeetingBox'
 import toast from 'toasted-notes'
+import PaymentsList from './../payment/PaymentsList'
 
 function EventDashboard(props) {
   let [event, setEvent] = useState({})
   let [host, setHost] = useState({})
   let [inviteMail, setInviteMail] = useState('')
   let [statistics, setStatistics] = useState([])
-  let [invitationLink, setInvitationLink] = useState('');
+  let [invitationLink, setInvitationLink] = useState('')
+  let [payments, setPayments] = useState('')
+  const [paymentsFormOpen, setPaymentsFormOpen] = useState(false)
+  
 
   function createMeeting() {
     api
@@ -70,6 +74,8 @@ function EventDashboard(props) {
           data.event.time
         ).format('HH:mm')}`,
       })
+      
+      setPayments(data.payments);
       setStatistics(data.statistics)
       setHost({
         fullName: `${data.event.user.firstName} ${data.event.user.lastName}`,
@@ -195,19 +201,23 @@ function EventDashboard(props) {
                   Tickets bought
                 </Typography>
                 <Typography variant="body2" component="p">
-                  46
+                {payments.length}
                 </Typography>
               </CardContent>
               <CardActions>
-                <Link
-                  to={{
-                    pathname: `/event/${event.id}/payments`,
-                  }}
-                >
-                  <Button color="primary" variant="outlined" fullWidth={true}>
-                    Payment details
-                  </Button>
-                </Link>
+             <Button color="primary" variant="outlined" fullWidth={true}
+                onClick={() => {
+                    setPaymentsFormOpen(true)
+                }}
+              >
+                List of current purchases
+              </Button>
+              <PaymentsList
+                open={paymentsFormOpen}
+                handleClose={() => {
+                    setPaymentsFormOpen(false)
+                }}
+              />
               </CardActions>
             </Card>
           </Box>

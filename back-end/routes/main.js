@@ -42,5 +42,6 @@ router.get('/meeting/:id/messages', auth, meetingsController.getAllMessages)
 
 router.post('/payment/create', auth, paymentsController.create)
 router.post('/event/invite-by-mail', auth, mailService.sendMail)
+router.get('/event/get-purchases', auth, eventsController.getPurchases)
 
 module.exports = router

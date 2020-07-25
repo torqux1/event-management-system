@@ -11,6 +11,7 @@ export default function EventList() {
 
   useEffect(() => {
     api.get(`/event/get-own`).then(({ data }) => {
+        console.log(data);
       if (data.success) {
         setEvents(data.events)
       } else {

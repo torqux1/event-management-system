@@ -68,8 +68,9 @@ function Navigation() {
         <Route path="/event/:id" component={EventDashboard} />
         <Route path="/meeting/create" component={MeetingCreate} />
         <Route path="/payment/create" component={PaymentCreate} />
-
         <Route path="/organization/:id" component={OrganizationDashboard} />
+
+
         
       </Switch>
       <Footer></Footer>
