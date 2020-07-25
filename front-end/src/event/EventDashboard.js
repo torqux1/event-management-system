@@ -74,7 +74,7 @@ function EventDashboard(props) {
       setHost({
         fullName: `${data.event.user.firstName} ${data.event.user.lastName}`,
       })
-      setInvitationLink(`${process.env.REACT_LIVE_SERVER_URL}/event/invitation/${data.event._id}`)
+      setInvitationLink(`${process.env.REACT_APP_LIVE_SERVER_URL}/event/invitation/${data.event._id}`)
     })
   }, [props.match.params.id])
 
