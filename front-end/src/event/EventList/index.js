@@ -24,8 +24,8 @@ export default function EventList() {
 
   return (
     <Grid container>
-      <Grid items md={2} sm={false}></Grid>
-      <Grid items md={8} sm={12}>
+      <Grid item md={2} sm={false}></Grid>
+      <Grid item md={8} sm={12}>
         {events.length ? (
           events.map((event) => (
             <EventCard
@@ -44,7 +44,7 @@ export default function EventList() {
           </Alert>
         )}
       </Grid>
-      <Grid items md={2} sm={false}></Grid>
+      <Grid item md={2} sm={false}></Grid>
     </Grid>
   )
 }

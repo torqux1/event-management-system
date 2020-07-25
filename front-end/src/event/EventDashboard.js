@@ -16,12 +16,44 @@ import EventDetails from './EventDetails.js'
 import EventStatistics from './EventStatistics.js'
 import moment from 'moment'
 import MeetingBox from './../meeting/MeetingBox'
+import toast from 'toasted-notes'
 
 function EventDashboard(props) {
   let [event, setEvent] = useState({})
   let [host, setHost] = useState({})
   let [inviteMail, setInviteMail] = useState('')
   let [statistics, setStatistics] = useState([])
+
+  function createMeeting() {
+    api
+      .post('/meeting/create', {
+        title: `${event.title}'s meeting`,
+        event: event.id,
+      })
+      .then(({ data }) => {
+        if (data.success) {
+          const newEvent = Object.assign({  }, event)
+          newEvent.meeting = data.meeting
+          setEvent(newEvent)
+          toast.notify('A meeting has been created!', {
+            position: 'bottom-left',
+            duration: 3000,
+          })
+        } else {
+          toast.notify(data.message, {
+            position: 'bottom-right',
+            duration: 3000,
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.notify('Error while creating a meeting', {
+          position: 'bottom-right',
+          duration: 3000,
+        })
+      })
+  }
 
   useEffect(() => {
     api.get(`/event/${props.match.params.id}`).then(({ data }) => {
@@ -82,23 +114,28 @@ function EventDashboard(props) {
                 <Typography variant="h6" component="h2">
                   Meeting
                 </Typography>
-                <Typography variant="body2" component="p">
-                  Meeting starts: 20/12/2019
-                  <br />
-                  Meeting Ends: 20/12/2019
-                </Typography>
+                {event.meeting ? (
+                  <Typography variant="body2" component="p">
+                    {event.meeting.title}
+                  </Typography>
+                ) : (
+                  'A meeting has not yet been created'
+                )}
               </CardContent>
-              <CardActions>
-                <Link
-                  to={{
-                    pathname: `/event/${event.id}/meeting`,
-                  }}
-                >
-                  <Button color="primary" variant="outlined" fullWidth={true}>
-                    Join
+              {!event.meeting ? (
+                <CardActions>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    fullWidth={true}
+                    onClick={createMeeting}
+                  >
+                    Create
                   </Button>
-                </Link>
-              </CardActions>
+                </CardActions>
+              ) : (
+                ''
+              )}
             </Card>
           </Box>
           <Box my={3}>

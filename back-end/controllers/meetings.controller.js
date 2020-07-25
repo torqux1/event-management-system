@@ -17,8 +17,6 @@ module.exports = {
                     event: data.event,
                 })
 
-                console.log(meeting)
-
                 if (meeting.length) {
                     return res.json({
                         success: false,

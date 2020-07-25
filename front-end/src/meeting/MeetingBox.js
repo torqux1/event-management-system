@@ -54,7 +54,7 @@ export default function MeetingBox(props) {
           duration: 3000,
         })
       })
-  }, [])
+  }, [currentUserId, props.id])
 
   return (
     <React.Fragment>

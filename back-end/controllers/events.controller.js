@@ -115,6 +115,7 @@ module.exports = {
                             success: true,
                             event,
                             statistics: [],
+                            meeting
                         })
                     }
                 }
