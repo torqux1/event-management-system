@@ -6,7 +6,7 @@ module.exports = {
         indicative
             .validate(req.body, {
                 eventId: 'required|string',
-                cardNumber: 'required|string|min:16|max:16',
+                cardNumber: 'required|string|min:1|max:16',
                 price: 'required|float',
             })
             .then(async (data) => {

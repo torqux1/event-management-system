@@ -2,6 +2,7 @@ const UserEventQuestionAnswer = require('./../models/user-event-question-answer.
     .model
 const Event = require('./../models/event.model').model
 const Answer = require('./../models/answer.model').model
+const Payment = require('./../models/payment.model').model
 
 module.exports = {
     submit: (req, res) => {
@@ -30,6 +31,8 @@ module.exports = {
                     })
                 }
             }
+
+            
 
             res.status(201).json({
                 success: true,
