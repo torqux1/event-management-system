@@ -17,6 +17,7 @@ import EventStatistics from './EventStatistics.js'
 import moment from 'moment'
 import MeetingBox from './../meeting/MeetingBox'
 import toast from 'toasted-notes'
+import auth from '../services/auth.service.js'
 
 function EventDashboard(props) {
   let [event, setEvent] = useState({})
@@ -66,6 +67,7 @@ function EventDashboard(props) {
         description: data.event.description,
         organization: data.event.organization,
         meeting: data.meeting,
+        user: data.event.user,
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
           data.event.time
         ).format('HH:mm')}`,
@@ -109,7 +111,7 @@ function EventDashboard(props) {
         <Grid item lg={1} md={1} sm={false} />
         <Grid item lg={7} md={7} sm={12}>
           <EventDetails event={event} host={host} />
-          {statistics.length ? (
+          {statistics.length && auth.isLoggedIn() && auth.parse().userId === event.user._id ? (
             <Box my={3}>
               <Paper>
                 <Box p={2}>
