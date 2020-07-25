@@ -35,10 +35,11 @@ router.post(
 )
 router.get('/organization/:id/post', organizationsController.posts)
 
+
+
 router.post('/meeting/create', auth, meetingsController.create)
 router.get('/meeting/:id/messages', auth, meetingsController.getAllMessages)
 
 router.post('/payment/create', auth, paymentsController.create)
-
 
 module.exports = router
