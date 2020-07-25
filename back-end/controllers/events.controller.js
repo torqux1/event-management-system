@@ -6,16 +6,16 @@ const Meeting = require('./../models/meeting.model.js').model
 const mongoose = require('mongoose')
 const groupBy = require('./../common/helpers').groupBy
 const isObjEmpty = require('./../common/helpers').isObjEmpty
+const Payment = require('./../models/payment.model').model
 
 module.exports = {
     index: (req, res) => {
-        Event.find((error, results) => {
+        Event.find((error, results) => {         
             if (error) {
                 res.json({
                     success: false,
                 })
             }
-
             res.json({
                 success: true,
                 events: results,
@@ -88,7 +88,7 @@ module.exports = {
         try {
             const event = await Event.findById(req.params.id).populate([
                 'user',
-                'organization',
+                'organization'
             ])
 
             if (!event) {
@@ -105,6 +105,11 @@ module.exports = {
             const questions = await Question.find({
                 event: event._id,
             }).populate('answers')
+
+            let payments = await Payment.find({
+                event: event._id,
+            }).populate('user') || [];
+
             event.questions = questions
 
             Event.generateStatistics(event.questions).then(async (items) => {
@@ -115,7 +120,8 @@ module.exports = {
                             success: true,
                             event,
                             statistics: [],
-                            meeting
+                            meeting,
+                            payments
                         })
                     }
                 }
@@ -140,6 +146,7 @@ module.exports = {
                     event,
                     meeting,
                     statistics: items,
+                    payments
                 })
             })
         } catch (error) {
@@ -168,4 +175,19 @@ module.exports = {
             }
         )
     },
+    getPurchases: (req, res) => {
+        Payment.findById(req.params.id),
+            (err, results) => {
+                if (err) {
+                    return res.json({
+                        success: false,
+                    })
+                }
+
+                res.json({
+                    success: true,
+                    events: results,
+                })
+            }
+    }
 }
