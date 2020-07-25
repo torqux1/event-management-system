@@ -6,8 +6,27 @@ import { api } from './../config/axios'
 import 'react-chat-widget/lib/styles.css'
 import toast from 'toasted-notes'
 
+const currentUserId = auth.parse().userId
+
+const socket = socketIOClient(process.env.REACT_APP_SOCKET_SERVER)
+
+socket.on('message-created', (message) => {
+  console.log(message)
+  if (message.user._id !== currentUserId) {
+    addResponseMessage(`${message.user.firstName}: ${message.content}`)
+  }
+})
+
+socket.on('message-error', (error) => {
+  console.log(error)
+  toast.notify('Error in storing message!', {
+    position: 'bottom-right',
+    duration: 3000,
+  })
+})
+
 export default function MeetingBox(props) {
-  const currentUserId = auth.parse().userId
+
   function handleNewUserMessage(messageContent) {
     socket.emit('new-message', {
       content: messageContent,
@@ -15,21 +34,6 @@ export default function MeetingBox(props) {
       meetingId: props.id,
     })
   }
-  const socket = socketIOClient(process.env.REACT_APP_SOCKET_SERVER)
-
-  socket.on('message-created', (message) => {
-    if (message.user._id !== currentUserId) {
-      addResponseMessage(`${message.user.firstName}: ${message.content}`)
-    }
-  })
-
-  socket.on('message-error', (error) => {
-    console.log(error)
-    toast.notify('Error in storing message!', {
-      position: 'bottom-right',
-      duration: 3000,
-    })
-  })
 
   useEffect(() => {
     api
