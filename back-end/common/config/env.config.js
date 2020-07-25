@@ -12,4 +12,6 @@ module.exports = {
         PAID_USER: 4,
         ADMIN: 2048,
     },
+    MAILER_SENDER: 'eventmngsystem@gmail.com',
+    MAILER_PASS:'123456789TT'
 }

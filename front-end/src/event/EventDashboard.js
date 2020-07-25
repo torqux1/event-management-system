@@ -23,6 +23,7 @@ function EventDashboard(props) {
   let [host, setHost] = useState({})
   let [inviteMail, setInviteMail] = useState('')
   let [statistics, setStatistics] = useState([])
+  let [invitationLink, setInvitationLink] = useState('');
 
   function createMeeting() {
     api
@@ -73,6 +74,7 @@ function EventDashboard(props) {
       setHost({
         fullName: `${data.event.user.firstName} ${data.event.user.lastName}`,
       })
+      setInvitationLink(`${process.env.REACT_LIVE_SERVER_URL}/event/invitation/${data.event._id}`)
     })
   }, [props.match.params.id])
 
@@ -80,12 +82,24 @@ function EventDashboard(props) {
     if (inviteMail) {
       api
         .post('/event/invite-by-mail', {
-          email: inviteMail,
+            mailReceiver: inviteMail,
+            eventName: event.title,
+            invitationLink: invitationLink
         })
         .then((res) => {
-          console.log('inviteby mail res')
+            console.log(res);
+            toast.notify('Email invitation successfully sent!', {
+                position: 'bottom-right',
+                duration: 1500,
+            })
+            setInviteMail('');
         })
-        .catch(console.error)
+        .catch((err) => {
+            toast.notify('Error sending email! Verify that email is correct!', {
+                position: 'bottom-right',
+                duration: 1500,
+            })
+        })
     }
   }
 
@@ -167,7 +181,7 @@ function EventDashboard(props) {
                 <Typography variant="body2" component="p">
                   or use this link: <br />
                   <Link to={`/event/invitation/${event.id}`}>
-                    {`${process.env.REACT_APP_API_URL}/event/invitation/${event.id}`}
+                    {invitationLink}
                   </Link>
                 </Typography>
               </CardContent>
