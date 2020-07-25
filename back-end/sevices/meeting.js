@@ -34,6 +34,7 @@ module.exports = {
             })
 
             socket.on('disconnect', () => {
+                clients.delete(socket.id)
                 console.log('Socket client disconnected')
             })
         })

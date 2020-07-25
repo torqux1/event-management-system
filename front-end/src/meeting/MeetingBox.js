@@ -6,8 +6,7 @@ import { api } from './../config/axios'
 import 'react-chat-widget/lib/styles.css'
 import toast from 'toasted-notes'
 
-const currentUserId = auth.parse().userId
-
+const currentUserId = auth.parse() ? auth.parse().userId : ''
 const socket = socketIOClient(process.env.REACT_APP_SOCKET_SERVER)
 
 socket.on('message-created', (message) => {
@@ -26,7 +25,6 @@ socket.on('message-error', (error) => {
 })
 
 export default function MeetingBox(props) {
-
   function handleNewUserMessage(messageContent) {
     socket.emit('new-message', {
       content: messageContent,

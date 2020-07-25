@@ -42,28 +42,33 @@ function Header(props) {
                 }}
               />
             </Link>
-            <Link to="#">
-              <Button
-                className={classes.navLink}
-                onClick={() => {
-                  auth.logout()
-                  props.handleLogout()
-                  history.push('/login')
-                }}
-              >
-                Logout
-              </Button>
-            </Link>
+            <div className={classes.right}>
+              <Link to="#">
+                <Button className={classes.navLink}>{auth.parse().name}</Button>
+              </Link>
+              <Link to="#">
+                <Button
+                  className={classes.navLink}
+                  onClick={() => {
+                    auth.logout()
+                    props.handleLogout()
+                    history.push('/login')
+                  }}
+                >
+                  Logout
+                </Button>
+              </Link>
+            </div>
           </React.Fragment>
         ) : (
-          <React.Fragment>
+          <div className={classes.right}>
             <Link to="/login">
               <Button className={classes.navLink}>Login</Button>
             </Link>
             <Link to="/register">
               <Button className={classes.navLink}>Register</Button>
             </Link>
-          </React.Fragment>
+          </div>
         )}
       </Toolbar>
     </AppBar>

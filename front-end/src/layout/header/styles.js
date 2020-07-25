@@ -4,6 +4,9 @@ const useStyles = makeStyles({
   navLink: {
     color: '#fff',
   },
+  right: {
+    marginLeft: 'auto',
+  },
 })
 
 export { useStyles }
