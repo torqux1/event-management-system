@@ -31,11 +31,13 @@ module.exports = {
                 time: 'required|date',
                 organization: 'string',
                 questions: 'array',
+                price: 'float'
             })
             .then(async () => {
                 const event = new Event()
                 event.title = req.body.title
                 event.description = req.body.description
+                event.price = req.body.price
                 event.date = req.body.date
                 event.time = req.body.time
                 event.user = req.user._id

@@ -7,6 +7,7 @@ const Schema = mongoose.Schema
 const eventSchema = new mongoose.Schema({
     title: String,
     description: String,
+    price: Number,
     date: Date,
     time: Date,
     organization: { type: Schema.Types.ObjectId, ref: 'Organization' },

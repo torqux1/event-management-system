@@ -33,6 +33,7 @@ function EventCreate() {
   const classes = useStyles()
   const [activeStep, setActiveStep] = useState(0)
   const [title, setTitle] = useState('')
+  const [price, setPrice] = useState(0)
   const [description, setDescription] = useState('')
   const [date, setDate] = useState(new Date())
   const [time, setTime] = useState(new Date())
@@ -63,10 +64,12 @@ function EventCreate() {
           time,
           organization,
           questions,
+          price
         })
         .then(({ data }) => {
           console.log(data)
           setTitle('')
+          setPrice(0)
           setDescription('')
           setDate(new Date())
           setTime(new Date())
@@ -121,6 +124,7 @@ function EventCreate() {
           <EventForm
             title={title}
             description={description}
+            price={price}
             date={date}
             time={time}
             organization={organization}
@@ -128,6 +132,7 @@ function EventCreate() {
             setOrganization={setOrganization}
             setTitle={setTitle}
             setDescription={setDescription}
+            setPrice={setPrice}
             setDate={setDate}
             setTime={setTime}
           />
@@ -149,6 +154,7 @@ function EventCreate() {
             event={{
               title,
               description,
+              price,
               dateTime:
                 moment(date).format('MM-DD-YYYY') +
                 ' ' +

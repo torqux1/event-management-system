@@ -29,6 +29,7 @@ function EventDashboard(props) {
       setEvent({
         id: data.event._id,
         title: data.event.title,
+        price: data.event.price,
         description: data.event.description,
         organization: data.event.organization,
         meeting: data.meeting,

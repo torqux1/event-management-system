@@ -26,10 +26,10 @@ function EventInvitationForm(props) {
         id: data.event._id,
         title: data.event.title,
         description: data.event.description,
+        price: data.event.price,
         dateTime: `${moment(data.event.date).format('DD-MM-YYYY')} ${moment(
           data.event.time
         ).format('HH:mm')}`,
-        price: 90 // TODO set Number(data.event.price)
       })
 
       setQuestions(data.event.questions)

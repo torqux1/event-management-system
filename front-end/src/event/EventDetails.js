@@ -11,6 +11,7 @@ function EventDetails(props) {
         <Box p={2}>
           <Typography variant="h5">{event.title}</Typography>
           <Typography>{event.description}</Typography>
+          <Typography>Price: {event.price}$</Typography>
           <Typography variant="overline" display="block" gutterBottom>
             {event.dateTime}
           </Typography>

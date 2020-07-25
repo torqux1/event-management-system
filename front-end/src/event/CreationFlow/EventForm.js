@@ -47,6 +47,18 @@ function EventForm(props) {
             value={props.description}
             onChange={(event) => props.setDescription(event.target.value)}
           />
+          <TextField
+          id="standard-number"
+          label="Price"
+          type="number"
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={props.price}
+          onChange={(event) => props.setPrice(event.target.value)}
+        />
+          
           <InputLabel id="demo-simple-select-outlined-label">
             Organization
           </InputLabel>
