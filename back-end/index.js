@@ -7,7 +7,7 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 http.listen(config.socketPort)
-const meetingService = require('./sevices/meeting')
+const meetingService = require('./services/meeting')
 meetingService.connectSocket(io)
 
 

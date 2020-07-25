@@ -5,8 +5,8 @@ const organizationsController = require('./../controllers/organizations.controll
 const invitationsController = require('../controllers/invitations.controller')
 const meetingsController = require('../controllers/meetings.controller')
 const paymentsController = require('../controllers/payments.controller')
-const auth = require('./../authorization/middlewares/verify.user.middleware')
-    .auth
+const auth = require('./../authorization/middlewares/verify.user.middleware').auth
+const mailService = require('../services/mailer')
 
 // Events
 router.post('/event/create', auth, eventsController.create)
@@ -41,5 +41,6 @@ router.post('/meeting/create', auth, meetingsController.create)
 router.get('/meeting/:id/messages', auth, meetingsController.getAllMessages)
 
 router.post('/payment/create', auth, paymentsController.create)
+router.post('/event/invite-by-mail', auth, mailService.sendMail)
 
 module.exports = router

@@ -70,6 +70,7 @@ function Navigation() {
         <Route path="/payment/create" component={PaymentCreate} />
 
         <Route path="/organization/:id" component={OrganizationDashboard} />
+        
       </Switch>
       <Footer></Footer>
     </Router>

@@ -3,12 +3,9 @@ const Message = require('./../models/message.model').model
 
 module.exports = {
     connectSocket: function (io) {
-        const clients = new Set()
         io.set('origins', clientEndpoint)
         io.on('connection', (socket) => {
-            console.log('A new client connected ' + socket.id)
-
-            clients.add(socket.id)
+            console.log('Socket client connected')
 
             socket.on('new-message', async (message) => {
                 console.log('A new message has been received')
@@ -24,9 +21,7 @@ module.exports = {
                         .populate('user')
                         .execPopulate()
 
-                    for (const client of clients) {
-                        io.to(client).emit('message-created', messageEntity)
-                    }
+                    socket.emit('message-created', messageEntity)
                 } catch (error) {
                     console.log(error)
                     socket.emit('message-error', error)
